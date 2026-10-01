@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { margin: 0; padding: 0; background-color: #f5f4f2; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+    .wrapper { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background-color: #7a1220; padding: 24px; text-align: center; border-radius: 12px 12px 0 0; }
+    .header h1 { color: #ffffff; font-size: 20px; margin: 0; font-weight: 700; }
+    .header p { color: #e8b4bc; font-size: 12px; margin: 6px 0 0; }
+    .content { background-color: #ffffff; padding: 32px 24px; }
+    .footer { background-color: #f5f4f2; padding: 20px 24px; text-align: center; border-radius: 0 0 12px 12px; border-top: 1px solid #e5e7eb; }
+    .footer p { color: #9ca3af; font-size: 12px; line-height: 1.5; margin: 0; }
+    .footer a { color: #e30818; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1><%= Conference.name %></h1>
+      <p>Treasure Hunt</p>
+    </div>
+    <div class="content">
+      <%= yield %>
+    </div>
+    <div class="footer">
+      <p>
+        <% if Conference.website_url.present? %><a href="<%= Conference.website_url %>"><%= Conference.name %></a> &middot; <% end %><%= Conference.city %><br>
+        <%= Conference.dates %>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

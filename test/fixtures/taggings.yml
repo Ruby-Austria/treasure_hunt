@@ -1,0 +1,2 @@
+# acts-as-taggable-on taggings — managed via Hunt.tag_list in tests
+# Empty fixture file to satisfy FK constraints during fixture loading

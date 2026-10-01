@@ -1,0 +1,87 @@
+<div class="min-h-dvh bg-warm-900 text-white antialiased font-['Inter'] relative overflow-hidden isolate">
+  <div class="absolute -top-40 -right-40 size-[24rem] sm:size-[32rem] rounded-full bg-ruby-600/25 blur-[120px] sm:blur-[140px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-1/2 -left-40 size-[20rem] rounded-full bg-ruby-500/10 blur-[100px] pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-2xl mx-auto px-5 sm:px-7 pt-10 sm:pt-16 pb-20">
+    <header class="mb-10">
+      <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-400 mb-3">Crew</p>
+      <h1 class="font-['Fraunces'] italic text-4xl sm:text-5xl tracking-tight leading-[1.05] text-balance"><%= @team.name %></h1>
+      <p class="mt-3 text-sm text-white/55"><%= pluralize(@team.members.count, "explorer") %> aboard</p>
+    </header>
+
+    <%# Invite Code %>
+    <section class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-6 sm:p-7 mb-5">
+      <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45 mb-3">Invite code</p>
+      <div class="flex items-center flex-wrap gap-3 sm:gap-4">
+        <code class="font-mono text-3xl sm:text-4xl font-bold text-ruby-300 tracking-[0.3em] select-all"><%= @team.invite_code %></code>
+        <div class="flex gap-2 ml-auto">
+          <button onclick="navigator.clipboard.writeText('<%= @team.invite_code %>'); this.textContent='Copied'; setTimeout(() => this.textContent='Copy', 1500)" class="inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white/80 hover:text-white rounded-md ring-1 ring-white/15 hover:ring-white/30 hover:bg-white/5 transition-all cursor-pointer">
+            Copy
+          </button>
+          <%= button_to "Regenerate", regenerate_code_team_path, method: :post, form_class: "contents", class: "inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white/80 hover:text-white rounded-md ring-1 ring-white/15 hover:ring-white/30 hover:bg-white/5 transition-all cursor-pointer" %>
+        </div>
+      </div>
+      <p class="text-xs text-white/45 mt-4">Share this code so other Rubyists can join your crew.</p>
+    </section>
+
+    <%# Members %>
+    <section class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-6 sm:p-7 mb-5">
+      <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45 mb-4">Members</p>
+      <ul role="list" class="divide-y divide-white/5">
+        <% @team.members.order(:created_at).each do |member| %>
+          <li class="py-3 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="size-9 shrink-0 rounded-full bg-ruby-500/15 ring-1 ring-ruby-500/30 text-ruby-200 flex items-center justify-center text-sm font-semibold">
+                <%= member.display_name.first.upcase %>
+              </div>
+              <span class="text-sm sm:text-base font-medium text-white/85 truncate"><%= member.display_name %></span>
+            </div>
+            <% if member == current_user %>
+              <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-ruby-500/20 text-ruby-300 ring-1 ring-ruby-500/30 whitespace-nowrap">You</span>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </section>
+
+    <%# Hunt Progress %>
+    <% team_adventures = Adventure.where(user: @team.members).includes(:hunt) %>
+    <% hunts_with_progress = team_adventures.group_by(&:hunt).map do |hunt, adventures|
+      best = adventures.max_by { |a| a.solved_clue_ids.count }
+      { hunt: hunt, solved: best.solved_clue_ids.count, total: hunt.clues.count, completed: adventures.any?(&:completed?) }
+    end %>
+
+    <% if hunts_with_progress.any? %>
+      <section class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-6 sm:p-7 mb-5">
+        <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-white/45 mb-4">Hunt progress</p>
+        <div class="space-y-5">
+          <% hunts_with_progress.each do |hp| %>
+            <div>
+              <div class="flex items-baseline justify-between text-sm mb-2 gap-3">
+                <span class="font-['Fraunces'] italic text-base sm:text-lg text-white/90 truncate"><%= hp[:hunt].name %></span>
+                <span class="font-mono text-xs text-white/55 tabular-nums whitespace-nowrap">
+                  <%= hp[:solved] %>/<%= hp[:total] %>
+                  <% if hp[:completed] %>
+                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30">Finished</span>
+                  <% end %>
+                </span>
+              </div>
+              <div class="relative w-full h-1.5 bg-white/8 rounded-full overflow-hidden" role="progressbar" aria-valuenow="<%= hp[:solved] %>" aria-valuemin="0" aria-valuemax="<%= hp[:total] %>" aria-label="<%= hp[:hunt].name %> progress">
+                <div class="absolute inset-y-0 left-0 bg-linear-to-r from-ruby-500 to-ruby-400 rounded-full" style="width: <%= hp[:total] > 0 ? (hp[:solved].to_f / hp[:total] * 100).round : 0 %>%"></div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <%# Leave %>
+    <div class="text-center mt-10">
+      <% if @team.has_completed_adventures? %>
+        <p class="text-xs text-white/40">You can't leave a team that has claimed treasure.</p>
+      <% else %>
+        <%= button_to "Leave team", leave_team_path, method: :delete, class: "text-xs text-white/45 hover:text-ruby-300 transition-colors px-4 py-2 cursor-pointer", data: { turbo_confirm: "Leave #{@team.name}?" } %>
+      <% end %>
+    </div>
+  </div>
+</div>

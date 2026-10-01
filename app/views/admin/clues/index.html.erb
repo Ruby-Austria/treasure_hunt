@@ -1,0 +1,56 @@
+<div class="bg-white rounded-lg shadow-md p-6 mb-8 flex justify-between items-center">
+  <h2 class="text-2xl font-semibold text-gray-900">Clues</h2>
+  <div class="flex gap-3 items-center">
+    <%= link_to "New Clue", new_admin_clue_path, class: "px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+  </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-md p-6">
+  <% if @clues.any? %>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr class="border-b-2 border-gray-200">
+            <th class="text-left py-3 px-4 text-sm font-semibold text-gray-500">Hunt</th>
+            <th class="text-left py-3 px-4 text-sm font-semibold text-gray-500">Location</th>
+            <th class="text-left py-3 px-4 text-sm font-semibold text-gray-500">Description</th>
+            <th class="text-left py-3 px-4 text-sm font-semibold text-gray-500">Difficulty</th>
+            <th class="text-right py-3 px-4 text-sm font-semibold text-gray-500">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @clues.each do |clue| %>
+            <tr class="border-b border-gray-100 hover:bg-gray-50">
+              <td class="py-3 px-4">
+                <%= link_to clue.hunt.name, admin_hunt_path(clue.hunt), class: "text-ruby-600 hover:text-ruby-700 font-medium" %>
+              </td>
+              <td class="py-3 px-4">
+                <%= link_to clue.location.name, admin_location_path(clue.location), class: "text-ruby-600 hover:text-ruby-700 font-medium" %>
+              </td>
+              <td class="py-3 px-4 text-gray-600">
+                <% clue_text = clue.riddle.presence || clue.description %>
+                <%= clue_text.present? ? truncate(clue_text, length: 50) : content_tag(:span, "No riddle", class: "text-gray-500 italic") %>
+              </td>
+              <td class="py-3 px-4">
+                <span class="text-xs font-medium px-2 py-1 rounded bg-gray-100 text-gray-600"><%= clue.difficulty.humanize %></span>
+              </td>
+              <td class="py-3 px-4 text-right">
+                <div class="flex gap-2 justify-end items-center">
+                  <%= link_to "Edit", edit_admin_clue_path(clue), class: "px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded hover:bg-gray-200 transition-colors" %>
+                  <%= button_to "Delete", admin_clue_path(clue), method: :delete,
+                      data: { turbo_confirm: "Are you sure?" },
+                      class: "px-3 py-1 text-xs font-semibold text-white bg-red-600 rounded hover:bg-red-700 transition-colors cursor-pointer" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="text-center py-12 text-gray-500">
+      <p class="text-lg mb-4">No clues found.</p>
+      <%= link_to "Create your first clue", new_admin_clue_path, class: "inline-block px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+    </div>
+  <% end %>
+</div>

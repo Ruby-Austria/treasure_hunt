@@ -1,0 +1,13 @@
+# Railway deployment — https://railway.com
+# Uses the included Dockerfile. Add a PostgreSQL plugin to the project and
+# Railway injects DATABASE_URL automatically.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/up"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

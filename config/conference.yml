@@ -1,0 +1,24 @@
+# Conference branding — the single place to rebrand the app for your event.
+# Everything here is safe to change; no code edits needed.
+#
+# These defaults are the RubyConf Austria 2026 settings, shipped as a
+# working example (see examples/rubyconf-austria/).
+
+conference:
+  # Full event name, used in page titles and the header.
+  name: "RubyConf Austria 2026"
+  # Short name, used for the PWA application name.
+  short_name: "RubyConf Treasure Hunt"
+  # Shown on the landing page hero: "Hunt for treasure across <city>."
+  city: "Vienna"
+  # Event dates as displayed on the landing page badge.
+  dates: "May 29–31, 2026"
+  # Primary theme color (hex) — used for the PWA theme-color meta tag.
+  # Tailwind palette colors are defined in app/assets/tailwind/application.css.
+  theme_color: "#e30818"
+  # Logo in app/assets/images/, shown in the top-left nav.
+  logo_asset: "rubyconf_logo.svg"
+  # Public URL of the event website (linked from mailer footer).
+  website_url: "https://rubyconf.at"
+  # Support email shown on the contact/error pages.
+  contact_email: "info@rubyconf.at"

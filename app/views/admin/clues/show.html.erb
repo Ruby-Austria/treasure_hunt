@@ -1,0 +1,109 @@
+<div class="bg-white rounded-lg shadow-md p-6 mb-8 flex justify-between items-center">
+  <h2 class="text-2xl font-semibold text-gray-900">Clue Details</h2>
+  <div class="flex gap-3 items-center">
+    <%= link_to "Edit", edit_admin_clue_path(@clue), class: "px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+    <%= button_to "Delete", admin_clue_path(@clue), method: :delete,
+        data: { turbo_confirm: "Are you sure you want to delete this clue?" },
+        class: "px-4 py-2 text-sm font-semibold text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors cursor-pointer" %>
+    <%= link_to "Back to Clues", admin_clues_path, class: "px-4 py-2 text-sm font-semibold text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" %>
+  </div>
+</div>
+
+<div class="bg-white rounded-lg shadow-md p-8 max-w-4xl">
+  <div class="grid md:grid-cols-2 gap-8 mb-8">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Clue Information</h3>
+      <dl class="space-y-4">
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Hunt</dt>
+          <dd><%= link_to @clue.hunt.name, admin_hunt_path(@clue.hunt), class: "text-lg text-ruby-600 hover:text-ruby-700" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Location</dt>
+          <dd><%= link_to @clue.location.name, admin_location_path(@clue.location), class: "text-lg text-ruby-600 hover:text-ruby-700" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Difficulty</dt>
+          <dd><span class="text-sm font-medium px-3 py-1 rounded bg-gray-100 text-gray-600"><%= @clue.difficulty.humanize %></span></dd>
+        </div>
+        <% clue_text = @clue.riddle.presence || @clue.description %>
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Riddle</dt>
+          <dd class="text-gray-700"><%= clue_text.present? ? clue_text : content_tag(:span, "No riddle", class: "text-gray-500 italic") %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div>
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Location Details (Delegated)</h3>
+      <dl class="space-y-4">
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">City</dt>
+          <dd class="text-gray-900"><%= @clue.city %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Country</dt>
+          <dd class="text-gray-900"><%= @clue.country %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Coordinates</dt>
+          <dd class="text-gray-900">
+            <%= @clue.lat %>, <%= @clue.long %>
+            <br>
+            <small class="text-gray-500">
+              <%= link_to "View on Google Maps", "https://www.google.com/maps?q=#{@clue.lat},#{@clue.long}", target: "_blank", class: "text-ruby-600 hover:text-ruby-700" %>
+            </small>
+          </dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Unlock Radius</dt>
+          <dd class="text-gray-900"><%= @clue.radius ? "#{@clue.radius} meters" : "Not set" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold text-gray-500 mb-1">Tags</dt>
+          <dd>
+            <% if @clue.tags.any? %>
+              <div class="flex flex-wrap gap-2">
+                <% @clue.tags.each do |tag| %>
+                  <span class="inline-block px-2 py-1 text-sm bg-ruby-50 text-gray-700 rounded"><%= tag %></span>
+                <% end %>
+              </div>
+            <% else %>
+              <span class="text-gray-500 italic">No tags</span>
+            <% end %>
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+
+  <% if @clue.reasoning.present? %>
+    <div class="mb-8 pt-8 border-t border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Reasoning</h3>
+      <p class="text-gray-600 leading-relaxed whitespace-pre-wrap"><%= @clue.reasoning %></p>
+    </div>
+  <% end %>
+
+  <% if @clue.hints.any? %>
+    <div class="mb-8 pt-8 border-t border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Hints</h3>
+      <ul class="space-y-2 ml-6 list-disc text-gray-600">
+        <% @clue.hints.each do |hint| %>
+          <li><%= hint %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if @clue.fun_fact.present? %>
+    <div class="mb-8 pt-8 border-t border-gray-200">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Fun Fact</h3>
+      <p class="text-gray-600 leading-relaxed"><%= @clue.fun_fact %></p>
+    </div>
+  <% end %>
+
+  <div class="pt-8 border-t border-gray-200 text-sm text-gray-500">
+    <p>Created: <%= @clue.created_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+    <p>Last updated: <%= @clue.updated_at.strftime("%B %d, %Y at %I:%M %p") %></p>
+  </div>
+</div>

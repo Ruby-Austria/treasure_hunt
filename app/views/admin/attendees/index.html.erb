@@ -1,0 +1,42 @@
+<div class="flex justify-between items-center mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-900">Attendees</h1>
+    <p class="text-sm text-gray-500 mt-1"><%= @attendees.count %> registered</p>
+  </div>
+  <div class="flex gap-2">
+    <%= link_to "Add Single", new_admin_attendee_path, class: "px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+    <%= link_to "Bulk Import", bulk_new_admin_attendees_path, class: "px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" %>
+  </div>
+</div>
+
+<% if @attendees.any? %>
+  <div class="bg-white rounded-lg shadow overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-200">
+          <th class="text-left px-4 py-3 font-semibold text-gray-700">Email</th>
+          <th class="text-left px-4 py-3 font-semibold text-gray-700">Registered</th>
+          <th class="text-left px-4 py-3 font-semibold text-gray-700">Adventures</th>
+          <th class="text-right px-4 py-3 font-semibold text-gray-700">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @attendees.each do |attendee| %>
+          <tr class="border-b border-gray-100 hover:bg-gray-50">
+            <td class="px-4 py-3 text-gray-900"><%= attendee.email %></td>
+            <td class="px-4 py-3 text-gray-500"><%= attendee.created_at.strftime("%b %d, %Y") %></td>
+            <td class="px-4 py-3 text-gray-500"><%= attendee.adventures.count %></td>
+            <td class="px-4 py-3 text-right">
+              <%= button_to "Remove", admin_attendee_path(attendee), method: :delete, class: "text-red-600 hover:text-red-700 font-medium text-sm cursor-pointer", data: { turbo_confirm: "Remove #{attendee.email}?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="bg-white rounded-lg shadow p-8 text-center">
+    <p class="text-gray-500 mb-4">No attendees registered yet.</p>
+    <%= link_to "Add first attendee", new_admin_attendee_path, class: "text-ruby-600 hover:text-ruby-700 font-semibold" %>
+  </div>
+<% end %>

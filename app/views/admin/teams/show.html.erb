@@ -1,0 +1,59 @@
+<div class="mb-6">
+  <%= link_to "← Back to Teams", admin_teams_path, class: "text-ruby-600 hover:text-ruby-800 text-sm" %>
+</div>
+
+<div class="flex justify-between items-start mb-6">
+  <div>
+    <h1 class="text-2xl font-bold text-gray-800"><%= @team.name %></h1>
+    <p class="text-sm text-gray-500 mt-1">Invite code: <code class="font-mono font-bold"><%= @team.invite_code %></code></p>
+  </div>
+  <span class="text-sm text-gray-400">Created <%= @team.created_at.strftime("%b %d, %Y %H:%M") %></span>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <%# Members %>
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Members (<%= @team.members.count %>)</h2>
+    <ul class="divide-y divide-gray-100">
+      <% @team.members.order(:created_at).each do |member| %>
+        <li class="py-3 flex justify-between items-center">
+          <span class="text-sm text-gray-900"><%= member.email %></span>
+          <span class="text-xs text-gray-400">joined <%= member.team_membership.created_at.strftime("%b %d") %></span>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+
+  <%# Progress %>
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">Hunt Progress</h2>
+    <% team_adventures = Adventure.where(user: @team.members).includes(:hunt) %>
+    <% hunts_progress = team_adventures.group_by(&:hunt).map do |hunt, adventures|
+      best = adventures.max_by { |a| a.solved_clue_ids.count }
+      { hunt: hunt, solved: best.solved_clue_ids.count, total: hunt.clues.count, completed: adventures.any?(&:completed?) }
+    end %>
+
+    <% if hunts_progress.any? %>
+      <div class="space-y-3">
+        <% hunts_progress.each do |hp| %>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium"><%= hp[:hunt].name %></span>
+              <span class="text-gray-500">
+                <%= hp[:solved] %>/<%= hp[:total] %>
+                <% if hp[:completed] %>
+                  <span class="text-green-600 font-medium">Completed</span>
+                <% end %>
+              </span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+              <div class="bg-ruby-600 h-2 rounded-full" style="width: <%= hp[:total] > 0 ? (hp[:solved].to_f / hp[:total] * 100).round : 0 %>%"></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p class="text-gray-400 text-sm">No hunts started yet.</p>
+    <% end %>
+  </div>
+</div>

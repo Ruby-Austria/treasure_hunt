@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+@theme {
+  /* RubyConf.at brand colors — scale built around primary #E30818 (H:355.6°) */
+  --color-ruby-50: #fff0f1;
+  --color-ruby-100: #fedcdf;
+  --color-ruby-200: #fcb5ba;
+  --color-ruby-300: #f87c85;
+  --color-ruby-400: #f63140;
+  --color-ruby-500: #e30818;
+  --color-ruby-600: #bd0512;
+  --color-ruby-700: #940510;
+  --color-ruby-800: #69070e;
+  --color-ruby-900: #46070b;
+  --color-ruby-950: #2e0508;
+
+  --color-accent: #8ec760;
+  --color-accent-light: #d4edbc;
+  --color-accent-dark: #6ba043;
+
+  /* Warm neutrals instead of cold blue-gray */
+  --color-warm-50: #fafaf9;
+  --color-warm-100: #f5f5f4;
+  --color-warm-200: #e7e5e4;
+  --color-warm-800: #292524;
+  --color-warm-900: #1c1917;
+}

@@ -1,0 +1,6 @@
+<%= yield %>
+
+---
+<%= Conference.name %> — Treasure Hunt
+<%= [Conference.city, Conference.dates].reject(&:blank?).join(" · ") %>
+<%= Conference.website_url %>

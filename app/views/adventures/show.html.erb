@@ -1,0 +1,365 @@
+<%
+  hunt = @adventure.hunt
+  total = hunt.clues.size
+  solved = @adventure.solved_clue_ids.count
+  pct = total > 0 ? (solved.to_f / total * 100).round : 0
+  show_ticks = total > 0 && total <= 12
+%>
+
+<div
+  data-controller="adventure"
+  data-adventure-adventure-id-value="<%= @adventure.id %>"
+  data-adventure-all-hints-value="<%= (@current_clue&.hints || []).to_json %>"
+  data-adventure-revealed-hints-value="<%= (@adventure.revealed_hints || []).to_json %>"
+  data-adventure-last-hint-revealed-at-value="<%= @adventure.last_hint_revealed_at ? @adventure.last_hint_revealed_at.to_i * 1000 : 0 %>"
+  data-adventure-cooldown-minutes-value="30"
+  class="min-h-dvh bg-warm-900 text-white antialiased font-['Inter'] relative overflow-hidden isolate">
+
+  <%# Ambient atmosphere %>
+  <div class="absolute -top-40 -right-40 size-[28rem] rounded-full bg-ruby-600/25 blur-[140px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute inset-0 opacity-[0.04] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:48px_48px] pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-2xl mx-auto px-5 sm:px-7 pt-20 sm:pt-24 pb-32">
+
+    <%# Top bar %>
+    <nav class="flex items-center justify-between mb-6">
+      <%= link_to hunt_path(@adventure.hunt), class: "inline-flex items-center gap-1.5 text-xs font-medium text-white/50 hover:text-white" do %>
+        <svg class="size-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4L6 8l4 4"/></svg>
+        Back to brief
+      <% end %>
+      <% if @adventure.in_progress? %>
+        <button
+          data-action="click->adventure#showAbandonModal"
+          class="px-3 py-2 text-xs font-medium text-white/50 hover:text-ruby-300 hover:bg-white/5 rounded-lg transition-colors cursor-pointer min-h-[44px] min-w-[44px]">
+          Abandon
+        </button>
+      <% end %>
+    </nav>
+
+    <%# Hunt header %>
+    <header class="mb-6">
+      <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-400 mb-2">Mission · <%= @adventure.status.humanize %></p>
+      <h1 class="font-['Fraunces'] italic text-3xl sm:text-4xl tracking-tight text-balance leading-[1.1] mb-4"><%= @adventure.hunt.name %></h1>
+
+      <%# Telemetry chips %>
+      <div class="flex flex-wrap items-center gap-2 mb-5">
+        <span class="font-mono text-[10px] uppercase tracking-wider text-white/60 bg-white/5 ring-1 ring-white/10 px-2.5 py-1 rounded tabular-nums">
+          <%= solved %> / <%= total %> clues
+        </span>
+        <span data-adventure-target="hintsUsedBadge" class="font-mono text-[10px] uppercase tracking-wider text-ruby-300 bg-ruby-500/15 ring-1 ring-ruby-500/30 px-2.5 py-1 rounded">
+          <%= pluralize(@adventure.hints_used, 'hint') %> used
+        </span>
+        <% if current_user.team %>
+          <span class="font-mono text-[10px] uppercase tracking-wider text-white/60 bg-white/5 ring-1 ring-white/10 px-2.5 py-1 rounded inline-flex items-center gap-1.5">
+            <span class="size-3 rounded-full bg-ruby-500/30 ring-1 ring-ruby-500/40 text-ruby-300 flex items-center justify-center text-[8px] font-semibold"><%= current_user.team.name.first.upcase %></span>
+            <%= current_user.team.name %>
+          </span>
+        <% end %>
+      </div>
+
+      <%# Route progress bar %>
+      <% if @adventure.in_progress? && total > 0 %>
+        <div class="flex items-center gap-3" role="progressbar" aria-valuenow="<%= solved %>" aria-valuemin="0" aria-valuemax="<%= total %>" aria-label="Hunt progress">
+          <span class="shrink-0 size-3 rounded-full bg-white/30 ring-2 ring-white/10 ring-offset-2 ring-offset-warm-900" aria-label="Start"></span>
+          <div class="relative flex-1 h-2 bg-white/8 rounded-full overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-linear-to-r from-ruby-400 to-ruby-500 rounded-full transition-all duration-500 w-(--p)" style="--p: <%= pct %>%"></div>
+            <% if pct > 0 && pct < 100 %>
+              <span class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 size-3 rounded-full bg-ruby-300 ring-2 ring-warm-900 left-(--p)" style="--p: <%= pct %>%"></span>
+              <span class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 size-5 rounded-full bg-ruby-400/40 animate-ping left-(--p) pointer-events-none" style="--p: <%= pct %>%" aria-hidden="true"></span>
+            <% end %>
+            <% if show_ticks %>
+              <% (1..(total - 1)).each do |i| %>
+                <span class="absolute top-0 bottom-0 w-px bg-warm-900/40 left-(--t)" style="--t: <%= (i.to_f / total * 100).round(2) %>%" aria-hidden="true"></span>
+              <% end %>
+            <% end %>
+          </div>
+          <span class="shrink-0 size-6 rounded-full bg-linear-to-br from-ruby-500 to-ruby-700 flex items-center justify-center <%= @all_solved ? 'shadow-[0_0_24px_rgba(227,8,24,0.45)]' : '' %>" aria-label="Reward terminus">
+            <span class="font-['Fraunces'] italic text-xs text-white">✕</span>
+          </span>
+        </div>
+      <% end %>
+    </header>
+
+    <%# Completion banner %>
+    <% if @all_solved %>
+      <section class="relative rounded-3xl bg-linear-to-br from-ruby-700 via-ruby-600 to-ruby-700 p-6 sm:p-8 text-center mb-6 ring-1 ring-ruby-400/40 shadow-[0_30px_80px_-20px_rgba(227,8,24,0.5)] overflow-hidden">
+        <div class="absolute inset-0 [background-image:radial-gradient(ellipse_at_top,rgba(255,255,255,0.15),transparent_50%)] pointer-events-none" aria-hidden="true"></div>
+        <div class="relative">
+          <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-200 mb-3">✦ Route cleared ✦</p>
+          <% if @adventure.hunt.completion_message.present? %>
+            <div class="text-base sm:text-lg text-white leading-relaxed text-pretty whitespace-pre-wrap"><%= @adventure.hunt.completion_message %></div>
+          <% else %>
+            <h2 class="font-['Fraunces'] italic text-3xl sm:text-4xl text-white mb-3 text-balance">Congratulations, Rubyist.</h2>
+            <p class="text-ruby-100">All clues solved. The X is yours to claim.</p>
+          <% end %>
+        </div>
+      </section>
+
+      <%# Treasure reveal %>
+      <% if @adventure.hunt.has_treasure? %>
+        <% hunt = @adventure.hunt %>
+        <section class="relative bg-black rounded-3xl ring-1 ring-white/10 mb-6 overflow-hidden" style="user-select: none; -webkit-user-select: none;">
+          <div class="relative p-6 sm:p-8">
+            <%# Header (above QR, no overlay) %>
+            <div class="text-center mb-6 relative">
+              <%# Diagonal watermark behind header text only %>
+              <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.06] rotate-[-12deg] -z-0" aria-hidden="true">
+                <span class="text-white text-3xl font-bold whitespace-nowrap"><%= current_user.email %></span>
+              </div>
+              <div class="relative">
+                <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-400 mb-2">X marks the spot</p>
+                <h3 class="font-['Fraunces'] italic text-2xl sm:text-3xl text-white">Mission complete.</h3>
+              </div>
+            </div>
+
+            <%# QR / treasure photo — clean, high contrast, scannable %>
+            <% if hunt.treasure_image.attached? %>
+              <div class="relative mb-6">
+                <div class="bg-white rounded-2xl p-4 sm:p-6 mx-auto max-w-sm flex items-center justify-center">
+                  <%= image_tag hunt.treasure_image, class: "w-full h-auto max-h-96 object-contain", alt: "Treasure claim QR code" %>
+                </div>
+                <p class="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-white/55">Show or scan this code at the spot</p>
+              </div>
+            <% end %>
+
+            <% if hunt.treasure_claimed? %>
+              <div class="mb-5 rounded-lg bg-amber-500/15 ring-1 ring-amber-500/30 px-4 py-3 text-center">
+                <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-amber-300 mb-1">Already claimed</p>
+                <p class="text-sm text-amber-100"><%= hunt.treasure_claimed_by %> got here first.</p>
+              </div>
+            <% end %>
+
+            <% if hunt.completion_message.present? %>
+              <p class="text-white/80 text-base leading-relaxed text-pretty mb-6 italic font-['Fraunces']"><%= hunt.completion_message %></p>
+            <% end %>
+
+            <%# Step-by-step instructions %>
+            <ol class="space-y-3 mb-6">
+              <li class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-5">
+                <div class="flex items-baseline gap-3 mb-2">
+                  <span class="shrink-0 size-6 rounded-full bg-ruby-500/20 ring-1 ring-ruby-500/30 text-ruby-300 flex items-center justify-center text-xs font-semibold font-mono">1</span>
+                  <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/45">Get to the spot</p>
+                </div>
+                <p class="text-white text-base leading-relaxed text-pretty whitespace-pre-wrap pl-9"><%= hunt.treasure_location %></p>
+              </li>
+
+              <% if hunt.treasure_access_code.present? %>
+                <li class="rounded-2xl bg-ruby-500/10 ring-1 ring-ruby-500/30 p-5">
+                  <div class="flex items-baseline gap-3 mb-2">
+                    <span class="shrink-0 size-6 rounded-full bg-ruby-500/25 ring-1 ring-ruby-500/40 text-ruby-200 flex items-center justify-center text-xs font-semibold font-mono">2</span>
+                    <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-ruby-300">Show this code</p>
+                  </div>
+                  <p class="text-white text-xl sm:text-2xl font-mono font-semibold tracking-[0.3em] pl-9 select-all"><%= hunt.treasure_access_code %></p>
+                </li>
+              <% end %>
+
+              <% if hunt.treasure_hint.present? %>
+                <li class="rounded-2xl bg-white/5 ring-1 ring-white/10 p-5">
+                  <div class="flex items-baseline gap-3 mb-2">
+                    <span class="shrink-0 size-6 rounded-full bg-white/10 ring-1 ring-white/20 text-white/70 flex items-center justify-center text-xs font-semibold font-mono"><%= hunt.treasure_access_code.present? ? "3" : "2" %></span>
+                    <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/45">Look for this</p>
+                  </div>
+                  <p class="text-white/85 text-sm sm:text-base leading-relaxed text-pretty pl-9"><%= hunt.treasure_hint %></p>
+                </li>
+              <% end %>
+            </ol>
+
+            <% if current_user.team %>
+              <div class="rounded-2xl bg-white/[0.03] ring-1 ring-white/10 p-4 mb-4">
+                <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/45 mb-1">Shared with <%= current_user.team.name %></p>
+                <p class="text-white/75 text-sm"><%= current_user.team.members.map(&:display_name).join(", ") %></p>
+              </div>
+            <% end %>
+
+            <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 text-center">First to arrive claims it</p>
+          </div>
+        </section>
+      <% end %>
+    <% end %>
+
+    <%# Current Clue %>
+    <% if @current_clue && @adventure.in_progress? %>
+      <section class="relative rounded-3xl bg-white/[0.03] ring-1 ring-ruby-500/30 p-5 sm:p-7 mb-6 isolate">
+        <div class="absolute inset-0 rounded-3xl overflow-hidden pointer-events-none -z-10" aria-hidden="true">
+          <div class="absolute inset-x-0 -top-10 h-40 bg-ruby-500/10 blur-3xl"></div>
+        </div>
+
+        <div class="relative">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="size-2 rounded-full bg-ruby-400 animate-pulse"></span>
+            <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-300">Clue <%= solved + 1 %> · Up next</p>
+          </div>
+
+          <h2 class="font-['Fraunces'] italic text-2xl sm:text-3xl text-white text-balance leading-[1.15] mb-2"><%= @current_clue.title.presence || "Clue #{solved + 1}" %></h2>
+          <p class="text-base text-white/75 leading-relaxed text-pretty whitespace-pre-wrap mb-6"><%= @current_clue.riddle.presence || @current_clue.description %></p>
+
+          <%# Hints %>
+          <% if @current_clue.hints.any? %>
+            <div class="rounded-2xl bg-warm-900/60 ring-1 ring-white/10 p-4 sm:p-5 mb-6">
+              <div class="flex items-center justify-between gap-3 flex-wrap mb-3">
+                <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/50">Hints</p>
+                <button
+                  data-adventure-target="revealHintBtn"
+                  data-action="click->adventure#revealRandomHint"
+                  aria-label="Reveal a hint for the current clue"
+                  class="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-ruby-500 rounded-lg hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 cursor-pointer">
+                  <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21h6m-3-18a7 7 0 00-4 12.7V18h8v-2.3A7 7 0 0012 3z"/></svg>
+                  Reveal hint
+                </button>
+              </div>
+
+              <div
+                data-adventure-target="hintErrorMessage"
+                class="mt-2 p-3 bg-ruby-500/10 ring-1 ring-ruby-500/30 rounded-lg hidden">
+                <p class="text-ruby-300 text-sm font-medium" data-adventure-target="hintErrorText"></p>
+              </div>
+              <div
+                data-adventure-target="cooldownMessage"
+                class="mt-2 p-3 bg-amber-500/10 ring-1 ring-amber-500/30 rounded-lg hidden">
+                <p class="text-amber-300 text-xs font-medium font-mono uppercase tracking-wider">
+                  Next hint in <span data-adventure-target="cooldownTimer" class="tabular-nums"></span>
+                </p>
+              </div>
+              <div
+                data-adventure-target="revealedHintsSection"
+                aria-live="polite"
+                class="mt-4 <%= @adventure.revealed_hints&.any? ? '' : 'hidden' %>">
+                <p class="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Revealed</p>
+                <ul
+                  data-adventure-target="hintsList"
+                  role="list"
+                  class="space-y-2">
+                  <% if @adventure.revealed_hints&.any? %>
+                    <% @adventure.revealed_hints.each do |hint| %>
+                      <li class="text-sm text-white/85 p-3 bg-white/5 rounded-lg ring-1 ring-white/10 text-pretty"><%= hint %></li>
+                    <% end %>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          <% end %>
+
+          <%# Admin override %>
+          <% if admin? && @adventure.in_progress? %>
+            <div class="mb-4 p-3 bg-amber-500/10 ring-1 ring-amber-500/30 rounded-lg">
+              <p class="font-mono text-[10px] uppercase tracking-wider text-amber-300 mb-2">Admin override</p>
+              <button
+                id="force-claim-btn"
+                data-action="click->adventure#forceClaim"
+                class="w-full px-4 py-2 text-xs font-semibold text-white bg-amber-600 rounded-lg hover:bg-amber-500 transition-colors cursor-pointer">
+                Force Claim
+              </button>
+            </div>
+
+            <div data-adventure-target="forceClaimModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="force-claim-modal-title">
+              <div class="bg-warm-900 rounded-2xl ring-1 ring-white/15 shadow-2xl p-6 max-w-sm mx-4 w-full">
+                <h3 id="force-claim-modal-title" class="text-lg font-semibold text-white mb-2 tracking-tight">Force Claim?</h3>
+                <p class="text-white/60 text-sm mb-5">This bypasses location verification. Cannot be undone.</p>
+                <div class="flex gap-3 justify-end">
+                  <button data-action="click->adventure#forceClaimCancel" class="px-4 py-2 text-sm font-semibold text-white/80 hover:text-white ring-1 ring-white/15 hover:ring-white/30 rounded-lg cursor-pointer">Cancel</button>
+                  <button data-action="click->adventure#forceClaimConfirm" class="px-4 py-2 text-sm font-semibold text-white bg-amber-600 rounded-lg hover:bg-amber-500 cursor-pointer">Force Claim</button>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+          <%# Debug %>
+          <% if admin? %>
+            <div
+              data-adventure-target="debugInfo"
+              class="bg-white/5 ring-1 ring-white/10 rounded-lg p-3 font-mono text-xs hidden">
+              <p class="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-2">Debug</p>
+              <div class="text-white/70" data-adventure-target="debugContent"></div>
+            </div>
+          <% end %>
+        </div>
+      </section>
+    <% end %>
+
+    <%# Solved Clues %>
+    <% if @solved_clues&.any? %>
+      <section>
+        <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 mb-4">Solved · <%= @solved_clues.count %></p>
+        <ol role="list" class="space-y-3">
+          <% @solved_clues.each_with_index do |clue, index| %>
+            <li class="rounded-2xl bg-white/[0.03] ring-1 ring-accent/30 p-4 sm:p-5">
+              <div class="flex items-start gap-3 mb-2">
+                <span class="size-7 rounded-full bg-accent flex items-center justify-center text-warm-900 shrink-0">
+                  <svg class="size-3.5" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><path d="M2.5 6L5 8.5 9.5 3.5"/></svg>
+                </span>
+                <div class="min-w-0 flex-1">
+                  <h3 class="font-['Fraunces'] italic text-lg text-white leading-tight"><%= clue.location.name %></h3>
+                  <p class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-0.5"><%= clue.location.city %> · <%= clue.location.country %></p>
+                </div>
+              </div>
+
+              <% if clue.description.present? %>
+                <p class="text-sm text-white/65 leading-relaxed text-pretty mb-3 ml-10"><%= clue.description %></p>
+              <% end %>
+
+              <% if clue.fun_fact.present? %>
+                <div class="ml-10" data-controller="toggle">
+                  <button data-action="click->toggle#toggle" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-mono uppercase tracking-wider text-ruby-300 bg-ruby-500/10 rounded-lg hover:bg-ruby-500/20 ring-1 ring-ruby-500/30 transition-colors cursor-pointer">
+                    <span data-toggle-target="label">Show</span> fun fact
+                  </button>
+                  <div data-toggle-target="content" class="hidden mt-3 p-3 bg-white/5 rounded-lg ring-1 ring-white/10">
+                    <p class="text-white/80 leading-relaxed text-sm text-pretty"><%= clue.fun_fact %></p>
+                  </div>
+                </div>
+              <% end %>
+            </li>
+          <% end %>
+        </ol>
+      </section>
+    <% end %>
+  </div>
+
+  <%# Sticky bottom action bar — visible only when active clue %>
+  <% if @current_clue && @adventure.in_progress? %>
+    <div class="fixed bottom-0 left-0 right-0 bg-warm-900/90 backdrop-blur-md border-t border-white/10 z-30 pb-[env(safe-area-inset-bottom)]">
+      <div class="max-w-2xl mx-auto px-5 sm:px-7 py-4 space-y-3">
+        <div
+          data-adventure-target="locationStatus"
+          aria-live="polite"
+          role="status"
+          class="p-3 rounded-lg hidden text-sm"></div>
+
+        <div
+          data-adventure-target="claimSection"
+          class="hidden">
+          <button
+            data-adventure-target="claimBtn"
+            data-action="click->adventure#claimClue"
+            aria-label="Claim this clue as solved"
+            class="group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold text-warm-900 bg-accent rounded-xl hover:bg-accent-light active:brightness-90 transition-colors shadow-[0_10px_40px_-10px_rgba(142,199,96,0.6)] ring-1 ring-accent cursor-pointer min-h-[52px]">
+            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5L20 7"/></svg>
+            Claim the clue
+          </button>
+        </div>
+
+        <button
+          data-adventure-target="checkLocationBtn"
+          data-action="click->adventure#checkLocation"
+          aria-label="Check if your current location is close to the clue"
+          class="group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold text-white bg-ruby-500 rounded-xl hover:bg-ruby-400 active:bg-ruby-600 transition-colors ring-1 ring-ruby-500 shadow-[0_10px_40px_-10px_rgba(227,8,24,0.6)] cursor-pointer min-h-[52px]">
+          <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Check if I'm close
+        </button>
+      </div>
+    </div>
+  <% end %>
+
+  <%# Abandon Modal %>
+  <% if @adventure.in_progress? %>
+    <div data-adventure-target="abandonModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="abandon-modal-title">
+      <div class="bg-warm-900 rounded-2xl ring-1 ring-white/15 shadow-2xl p-6 max-w-sm mx-4 w-full">
+        <h3 id="abandon-modal-title" class="text-lg font-semibold text-white mb-2 tracking-tight">Abandon adventure?</h3>
+        <p class="text-white/60 text-sm mb-5">Your progress will be saved but you can't continue. You can start a new adventure for this hunt.</p>
+        <div class="flex gap-3 justify-end">
+          <button data-action="click->adventure#hideAbandonModal" class="px-4 py-2 text-sm font-semibold text-white/80 hover:text-white ring-1 ring-white/15 hover:ring-white/30 rounded-lg cursor-pointer">Cancel</button>
+          <%= button_to "Abandon", abandon_adventure_path(@adventure), method: :delete, class: "px-4 py-2 text-sm font-semibold text-white bg-ruby-500 hover:bg-ruby-400 rounded-lg cursor-pointer" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

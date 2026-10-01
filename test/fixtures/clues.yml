@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hunt: one
+  location: one
+  description: Look for the red door near the entrance
+  difficulty: moderate
+  reasoning: This location is significant because of its historical value
+
+two:
+  hunt: two
+  location: one
+  description: Check the fountain area
+  difficulty: hard
+  reasoning: The fountain is a landmark

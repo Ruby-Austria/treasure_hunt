@@ -1,0 +1,145 @@
+<div class="min-h-dvh bg-warm-900 text-white antialiased font-['Inter'] relative overflow-hidden isolate">
+  <%# Subtle map grid backdrop %>
+  <div class="absolute inset-0 opacity-[0.05] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:48px_48px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute inset-0 [background-image:radial-gradient(ellipse_at_center,transparent_40%,rgba(28,25,23,0.8)_100%)] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute -top-32 -right-32 size-[26rem] rounded-full bg-ruby-600/20 blur-[140px] pointer-events-none" aria-hidden="true"></div>
+
+  <%
+    hunts_with_state = @hunts.map do |h|
+      adv = @active_adventures.find { |a| a.hunt_id == h.id } || @completed_adventures.find { |a| a.hunt_id == h.id }
+      state = if @active_adventures.any? { |a| a.hunt_id == h.id } then :active
+              elsif @completed_adventures.any? { |a| a.hunt_id == h.id } then :done
+              else :idle
+              end
+      [h, adv, state]
+    end
+  %>
+
+  <div class="relative max-w-5xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
+
+    <%# Map header %>
+    <div class="flex items-start justify-between mb-10 sm:mb-14 flex-wrap gap-4">
+      <div>
+        <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-400 mb-2">Vienna · Two routes · Two rewards</p>
+        <h1 class="font-['Fraunces'] italic text-3xl sm:text-4xl tracking-tight">Greetings, <%= current_user.display_name.split(/[\s._]+/).first.to_s.capitalize %>.</h1>
+        <p class="mt-2 text-sm text-white/55 max-w-[55ch] text-pretty">Each route ends at its own X. One holds €3,000 in the chest. The other holds something sweet. You won't know which is which until you reach the end.</p>
+      </div>
+      <% unless @team %>
+        <%= link_to "Join crew →", new_team_path, class: "text-xs font-medium text-ruby-300 hover:text-ruby-200" %>
+      <% end %>
+    </div>
+
+    <%# Two parallel routes %>
+    <div class="grid lg:grid-cols-2 gap-6 sm:gap-8">
+      <% hunts_with_state.each_with_index do |(hunt, adv, state), idx| %>
+        <% pct = (adv && hunt.clues.any?) ? (adv.solved_clue_ids.count.to_f / hunt.clues.size * 100).round : 0 %>
+        <article class="relative rounded-3xl bg-white/[0.025] ring-1 <%= state == :active ? 'ring-ruby-500/40' : 'ring-white/10' %> p-6 sm:p-7 overflow-hidden">
+          <% if state == :active %>
+            <div class="absolute -inset-x-10 -top-20 h-40 bg-ruby-500/15 blur-3xl pointer-events-none" aria-hidden="true"></div>
+          <% end %>
+
+          <div class="relative">
+            <div class="flex items-baseline gap-3 mb-2 flex-wrap">
+              <p class="font-mono text-[10px] uppercase tracking-[0.3em]
+                <%= state == :active ? 'text-ruby-300' : state == :done ? 'text-accent' : 'text-white/40' %>">
+                Route <%= ['I', 'II', 'III', 'IV'][idx] %> · <%= state == :active ? "Currently exploring" : state == :done ? "Cleared" : "Awaiting" %>
+              </p>
+              <% if state == :active %>
+                <span class="font-mono text-[10px] tabular-nums text-ruby-300/70"><%= pct %>%</span>
+              <% end %>
+            </div>
+            <h2 class="font-['Fraunces'] italic text-2xl sm:text-3xl text-white text-balance mb-2"><%= hunt.name %></h2>
+            <% if hunt.description.present? %>
+              <p class="text-sm text-white/55 line-clamp-2 text-pretty mb-6"><%= hunt.description %></p>
+            <% else %>
+              <div class="mb-6"></div>
+            <% end %>
+
+            <%# Route — start ━━━━━━ X. Progress bar scales to any clue count.   %>
+            <%# Tick marks render per clue when ≤12, otherwise the bar is plain. %>
+            <%
+              clue_count = hunt.clues.size
+              solved_count = adv ? adv.solved_clue_ids.count : 0
+              show_ticks = clue_count > 0 && clue_count <= 12
+            %>
+            <div class="flex items-center gap-2 sm:gap-3 mb-3" role="progressbar" aria-valuenow="<%= solved_count %>" aria-valuemin="0" aria-valuemax="<%= clue_count %>" aria-label="<%= hunt.name %> progress">
+              <span class="shrink-0 size-3.5 rounded-full bg-white/30 ring-2 ring-white/10 ring-offset-2 ring-offset-warm-900" aria-label="Start"></span>
+
+              <div class="relative flex-1 h-2 bg-white/8 rounded-full overflow-hidden">
+                <%# filled segment %>
+                <div class="absolute inset-y-0 left-0 bg-linear-to-r <%= state == :done ? 'from-accent to-accent-dark' : 'from-ruby-400 to-ruby-500' %> rounded-full transition-all w-(--p)" style="--p: <%= pct %>%"></div>
+
+                <%# pulse at current position when active %>
+                <% if state == :active && clue_count > 0 %>
+                  <span class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 size-3 rounded-full bg-ruby-300 ring-2 ring-warm-900 left-(--p)" style="--p: <%= pct %>%"></span>
+                  <span class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 size-5 rounded-full bg-ruby-400/40 animate-ping left-(--p) pointer-events-none" style="--p: <%= pct %>%" aria-hidden="true"></span>
+                <% end %>
+
+                <%# tick marks for small clue counts %>
+                <% if show_ticks %>
+                  <% (1..(clue_count - 1)).each do |i| %>
+                    <span class="absolute top-0 bottom-0 w-px bg-warm-900/40 left-(--t)" style="--t: <%= (i.to_f / clue_count * 100).round(2) %>%" aria-hidden="true"></span>
+                  <% end %>
+                <% end %>
+              </div>
+
+              <%# X terminus %>
+              <% if state == :done %>
+                <span class="shrink-0 size-7 rounded-full bg-accent flex items-center justify-center shadow-[0_0_20px_rgba(142,199,96,0.4)]" aria-label="Reached X">
+                  <svg class="size-4 text-white" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><path d="M2.5 6L5 8.5 9.5 3.5"/></svg>
+                </span>
+              <% else %>
+                <span class="shrink-0 size-7 rounded-full bg-linear-to-br from-ruby-500 to-ruby-700 flex items-center justify-center <%= state == :active ? 'shadow-[0_0_24px_rgba(227,8,24,0.45)]' : '' %>" aria-label="Reward terminus">
+                  <span class="font-['Fraunces'] italic text-sm text-white">✕</span>
+                </span>
+              <% end %>
+            </div>
+
+            <div class="flex items-center justify-between gap-3 mb-6 font-mono text-[10px] uppercase tracking-widest text-white/40 tabular-nums">
+              <span>Start</span>
+              <span class="truncate"><%= adv ? "#{adv.solved_clue_ids.count} of " : "" %><%= pluralize(hunt.clues.size, 'clue') %></span>
+              <span class="<%= state == :done ? 'text-accent' : 'text-ruby-300/70' %>"><%= state == :done ? "Reached X" : "X · ?" %></span>
+            </div>
+
+            <% case state when :active %>
+              <%= link_to adventure_path(adv), class: "group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-ruby-500 text-white rounded-lg hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500" do %>
+                Resume
+                <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+              <% end %>
+            <% when :done %>
+              <%= link_to hunt_path(hunt), class: "inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-light" do %>
+                Revisit
+                <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+              <% end %>
+            <% else %>
+              <%= link_to hunt_path(hunt), class: "group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white/85 hover:text-white rounded-lg ring-1 ring-white/15 hover:ring-white/30 hover:bg-white/5 transition-all" do %>
+                Set out
+                <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+              <% end %>
+            <% end %>
+          </div>
+        </article>
+      <% end %>
+    </div>
+
+    <%# Fellow explorers %>
+    <% if @leaderboard.any? %>
+      <aside class="mt-12 sm:mt-16 pt-10 border-t border-white/10">
+        <div class="flex items-baseline justify-between mb-5">
+          <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-white/50">Fellow explorers</p>
+          <%= link_to "Full →", leaderboard_path, class: "font-mono text-[10px] uppercase tracking-wider text-white/50 hover:text-white" %>
+        </div>
+        <ul role="list" class="grid sm:grid-cols-2 gap-x-8 gap-y-1.5">
+          <% @leaderboard.each_with_index do |entry, i| %>
+            <% is_current = (@team && entry[:team] && entry[:name] == @team.name) || (!entry[:team] && entry[:name] == current_user.display_name) %>
+            <li class="flex items-baseline gap-3 py-1">
+              <span class="font-mono text-xs tabular-nums w-6 <%= i < 3 ? 'text-ruby-300' : 'text-white/40' %>"><%= format("%02d", i + 1) %></span>
+              <span class="font-['Fraunces'] italic flex-1 truncate <%= is_current ? 'text-ruby-300' : 'text-white/85' %>"><%= entry[:name] %><%= " (you)" if is_current %></span>
+              <span class="font-mono text-xs text-white/50 tabular-nums"><%= entry[:total_solved] %></span>
+            </li>
+          <% end %>
+        </ul>
+      </aside>
+    <% end %>
+  </div>
+</div>

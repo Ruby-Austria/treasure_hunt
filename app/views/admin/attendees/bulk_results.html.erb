@@ -1,0 +1,53 @@
+<div class="max-w-lg">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6">Import Results</h1>
+
+  <% if @results[:created].any? %>
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-gray-900 mb-3">
+        Created (<%= @results[:created].size %>)
+      </h2>
+      <div class="bg-white rounded-lg shadow overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-green-50 border-b border-green-200">
+              <th class="text-left px-4 py-2 font-semibold text-green-800">Email</th>
+              <th class="text-left px-4 py-2 font-semibold text-green-800">Password</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @results[:created].each do |entry| %>
+              <tr class="border-b border-gray-100">
+                <td class="px-4 py-2 text-gray-900"><%= entry[:email] %></td>
+                <td class="px-4 py-2 font-mono text-gray-700"><%= entry[:password] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-gray-500 mt-2">Copy the passwords now — they cannot be retrieved later.</p>
+    </div>
+  <% end %>
+
+  <% if @results[:errors].any? %>
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-red-800 mb-3">
+        Errors (<%= @results[:errors].size %>)
+      </h2>
+      <div class="bg-red-50 rounded-lg p-4 border border-red-200">
+        <ul class="space-y-2 text-sm">
+          <% @results[:errors].each do |entry| %>
+            <li>
+              <span class="font-medium text-red-800"><%= entry[:email] %></span>
+              <span class="text-red-600">— <%= entry[:errors].join(", ") %></span>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="flex gap-3">
+    <%= link_to "View All Attendees", admin_attendees_path, class: "px-6 py-3 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+    <%= link_to "Import More", bulk_new_admin_attendees_path, class: "px-6 py-3 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" %>
+  </div>
+</div>

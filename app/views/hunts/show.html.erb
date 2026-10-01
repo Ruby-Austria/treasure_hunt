@@ -1,0 +1,129 @@
+<div class="min-h-dvh bg-warm-900 text-white antialiased font-['Inter'] relative overflow-hidden isolate">
+  <div class="absolute -top-40 -right-40 size-[28rem] rounded-full bg-ruby-600/25 blur-[140px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute inset-0 opacity-[0.04] [background-image:linear-gradient(to_right,white_1px,transparent_1px),linear-gradient(to_bottom,white_1px,transparent_1px)] [background-size:48px_48px] pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-12">
+    <%= link_to logged_in? ? dashboard_path : root_path, class: "inline-flex items-center gap-1.5 text-xs font-medium text-white/50 hover:text-white mb-8" do %>
+      <svg class="size-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4L6 8l4 4"/></svg>
+      Back
+    <% end %>
+
+    <div class="mb-8">
+      <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-400 mb-3">Mission brief</p>
+      <h1 class="font-['Fraunces'] italic text-4xl sm:text-5xl lg:text-6xl tracking-tight text-balance leading-[1.05]"><%= @hunt.name %></h1>
+    </div>
+
+    <%# Telemetry %>
+    <dl class="grid grid-cols-3 gap-px bg-white/10 rounded-xl ring-1 ring-white/10 overflow-hidden mb-8 text-center">
+      <div class="bg-warm-900 p-4">
+        <dt class="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-1">Locations</dt>
+        <dd class="text-xl font-semibold tabular-nums"><%= format("%02d", @hunt.clues.size) %></dd>
+      </div>
+      <div class="bg-warm-900 p-4">
+        <dt class="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-1">Duration</dt>
+        <dd class="text-xl font-semibold tabular-nums"><%= @hunt.estimated_duration_min.present? ? "~#{@hunt.estimated_duration_min}m" : "—" %></dd>
+      </div>
+      <div class="bg-warm-900 p-4">
+        <dt class="font-mono text-[10px] uppercase tracking-wider text-white/40 mb-1">Reward</dt>
+        <dd class="text-xl font-semibold text-ruby-300 font-['Fraunces'] italic">X · ?</dd>
+      </div>
+    </dl>
+
+    <% if @hunt.description.present? %>
+      <p class="text-base sm:text-lg text-white/70 leading-relaxed text-pretty whitespace-pre-wrap mb-10 max-w-[60ch]"><%= @hunt.description %></p>
+    <% end %>
+
+    <%
+      adv = @latest_adventure
+      solved = adv ? adv.solved_clue_ids.count : 0
+      total = @hunt.clues.size
+      pct = total > 0 ? (solved.to_f / total * 100).round : 0
+      show_ticks = total > 0 && total <= 12
+    %>
+    <% if total > 0 %>
+      <div class="mb-10">
+        <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 mb-3">The route</p>
+        <div class="flex items-center gap-3" role="progressbar" aria-valuenow="<%= solved %>" aria-valuemin="0" aria-valuemax="<%= total %>" aria-label="Route progress">
+          <span class="shrink-0 size-3.5 rounded-full bg-white/30 ring-2 ring-white/10 ring-offset-2 ring-offset-warm-900" aria-label="Start"></span>
+          <div class="relative flex-1 h-2.5 bg-white/8 rounded-full overflow-hidden">
+            <div class="absolute inset-y-0 left-0 bg-linear-to-r from-ruby-400 to-ruby-500 rounded-full w-(--p)" style="--p: <%= pct %>%"></div>
+            <% if adv && pct > 0 && pct < 100 %>
+              <span class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 size-3.5 rounded-full bg-ruby-300 ring-2 ring-warm-900 left-(--p)" style="--p: <%= pct %>%"></span>
+              <span class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 size-6 rounded-full bg-ruby-400/40 animate-ping left-(--p) pointer-events-none" style="--p: <%= pct %>%" aria-hidden="true"></span>
+            <% end %>
+            <% if show_ticks %>
+              <% (1..(total - 1)).each do |i| %>
+                <span class="absolute top-0 bottom-0 w-px bg-warm-900/40 left-(--t)" style="--t: <%= (i.to_f / total * 100).round(2) %>%" aria-hidden="true"></span>
+              <% end %>
+            <% end %>
+          </div>
+          <span class="shrink-0 size-7 rounded-full bg-linear-to-br from-ruby-500 to-ruby-700 flex items-center justify-center shadow-[0_0_24px_rgba(227,8,24,0.45)]" aria-label="Reward terminus">
+            <span class="font-['Fraunces'] italic text-sm text-white">✕</span>
+          </span>
+        </div>
+        <div class="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-widest text-white/40 tabular-nums">
+          <span>Start</span>
+          <span><%= adv ? "#{solved} of " : "" %><%= pluralize(total, 'clue') %></span>
+          <span class="text-ruby-300/70">X · ?</span>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="rounded-2xl bg-white/[0.03] ring-1 ring-white/10 p-6 sm:p-8 mb-10">
+      <% if !logged_in? %>
+        <%= link_to login_path, class: "group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold bg-ruby-500 text-white rounded-xl hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 shadow-[0_10px_40px_-10px_rgba(227,8,24,0.6)]" do %>
+          Log in to begin
+          <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+        <% end %>
+      <% elsif total == 0 %>
+        <p class="text-sm text-white/50 italic text-center">This hunt has no clues yet and cannot be started.</p>
+      <% elsif @latest_adventure %>
+        <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-accent mb-3 text-center">Adventure in progress</p>
+        <%= link_to adventure_path(@latest_adventure), class: "group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold bg-ruby-500 text-white rounded-xl hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 shadow-[0_10px_40px_-10px_rgba(227,8,24,0.6)]" do %>
+          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Resume mission
+        <% end %>
+      <% else %>
+        <%= button_to hunt_adventures_path(@hunt), method: :post, class: "group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold bg-ruby-500 text-white rounded-xl hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 shadow-[0_10px_40px_-10px_rgba(227,8,24,0.6)] cursor-pointer" do %>
+          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Start adventure
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if @past_adventures&.any? %>
+      <div>
+        <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/40 mb-4">Past attempts · <%= @past_adventures_count %></p>
+        <ul role="list" class="divide-y divide-white/5">
+          <% @past_adventures.each do |adventure| %>
+            <li>
+              <%= link_to adventure_path(adventure), class: "group flex items-center justify-between gap-4 py-3 hover:bg-white/[0.02] -mx-2 px-2 rounded-lg transition-colors" do %>
+                <div class="min-w-0 flex items-center gap-3">
+                  <span class="size-2 rounded-full bg-accent shrink-0"></span>
+                  <div class="min-w-0">
+                    <p class="text-sm font-medium text-white/85 truncate">Cleared · <%= adventure.solved_clue_ids.count %>/<%= adventure.hunt.clues.size %></p>
+                    <p class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-0.5"><%= adventure.updated_at.strftime("%b %d, %Y") %> · <%= pluralize(adventure.hints_used, 'hint') %></p>
+                  </div>
+                </div>
+                <svg class="size-3.5 text-white/40 group-hover:text-white" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <% if @past_total_pages > 1 %>
+          <div class="flex justify-between items-center mt-4 pt-4 border-t border-white/10">
+            <span class="font-mono text-[10px] uppercase tracking-wider text-white/40 tabular-nums"><%= (@past_page - 1) * @past_per_page + 1 %>–<%= [ @past_page * @past_per_page, @past_adventures_count ].min %> of <%= @past_adventures_count %></span>
+            <div class="flex gap-2">
+              <% if @past_page > 1 %>
+                <%= link_to "← Prev", hunt_path(@hunt, past_page: @past_page - 1), class: "px-3 py-1.5 text-xs font-medium text-white/70 hover:text-white ring-1 ring-white/10 rounded hover:ring-white/25" %>
+              <% end %>
+              <% if @past_page < @past_total_pages %>
+                <%= link_to "Next →", hunt_path(@hunt, past_page: @past_page + 1), class: "px-3 py-1.5 text-xs font-medium text-white/70 hover:text-white ring-1 ring-white/10 rounded hover:ring-white/25" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

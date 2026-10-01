@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= content_for(:title) || "Admin - TreasureHunt.io" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-gray-100">
+    <%# Mobile top bar — visible only on small screens %>
+    <div class="md:hidden bg-ruby-900 text-white px-4 py-3">
+      <div class="flex justify-between items-center mb-3">
+        <h1 class="text-lg font-semibold">Admin Panel</h1>
+        <%= link_to "← Site", root_path, class: "text-gray-300 hover:text-white text-sm" %>
+      </div>
+      <nav class="flex gap-2 flex-wrap">
+        <%= link_to "Dashboard", admin_root_path,
+            class: "px-3 py-1.5 text-sm rounded #{request.path == admin_root_path ? 'bg-ruby-600 text-white' : 'text-gray-300 hover:bg-ruby-800'}" %>
+        <%= link_to "Locations", admin_locations_path,
+            class: "px-3 py-1.5 text-sm rounded #{request.path.start_with?('/admin/locations') ? 'bg-ruby-600 text-white' : 'text-gray-300 hover:bg-ruby-800'}" %>
+        <%= link_to "Hunts", admin_hunts_path,
+            class: "px-3 py-1.5 text-sm rounded #{request.path.start_with?('/admin/hunts') ? 'bg-ruby-600 text-white' : 'text-gray-300 hover:bg-ruby-800'}" %>
+        <%= link_to "Clues", admin_clues_path,
+            class: "px-3 py-1.5 text-sm rounded #{request.path.start_with?('/admin/clues') ? 'bg-ruby-600 text-white' : 'text-gray-300 hover:bg-ruby-800'}" %>
+        <%= link_to "Attendees", admin_attendees_path,
+            class: "px-3 py-1.5 text-sm rounded #{request.path.start_with?('/admin/attendees') ? 'bg-ruby-600 text-white' : 'text-gray-300 hover:bg-ruby-800'}" %>
+        <%= link_to "Teams", admin_teams_path,
+            class: "px-3 py-1.5 text-sm rounded #{request.path.start_with?('/admin/teams') ? 'bg-ruby-600 text-white' : 'text-gray-300 hover:bg-ruby-800'}" %>
+      </nav>
+    </div>
+
+    <div class="flex min-h-screen">
+      <%# Desktop sidebar — hidden on mobile %>
+      <aside class="hidden md:flex w-64 bg-ruby-900 text-white fixed h-screen overflow-y-auto flex-col">
+        <div class="px-6 py-5 border-b border-ruby-800">
+          <h1 class="text-lg font-semibold">Admin Panel</h1>
+        </div>
+        <nav class="py-4 flex-1">
+          <%= link_to "Dashboard", admin_root_path,
+              class: "block px-6 py-3 text-gray-300 hover:bg-ruby-800 transition-colors #{request.path == admin_root_path ? 'bg-ruby-600 !text-white' : ''}" %>
+          <%= link_to "Locations", admin_locations_path,
+              class: "block px-6 py-3 text-gray-300 hover:bg-ruby-800 transition-colors #{request.path.start_with?('/admin/locations') ? 'bg-ruby-600 !text-white' : ''}" %>
+          <%= link_to "Hunts", admin_hunts_path,
+              class: "block px-6 py-3 text-gray-300 hover:bg-ruby-800 transition-colors #{request.path.start_with?('/admin/hunts') ? 'bg-ruby-600 !text-white' : ''}" %>
+          <%= link_to "Clues", admin_clues_path,
+              class: "block px-6 py-3 text-gray-300 hover:bg-ruby-800 transition-colors #{request.path.start_with?('/admin/clues') ? 'bg-ruby-600 !text-white' : ''}" %>
+          <%= link_to "Attendees", admin_attendees_path,
+              class: "block px-6 py-3 text-gray-300 hover:bg-ruby-800 transition-colors #{request.path.start_with?('/admin/attendees') ? 'bg-ruby-600 !text-white' : ''}" %>
+          <%= link_to "Teams", admin_teams_path,
+              class: "block px-6 py-3 text-gray-300 hover:bg-ruby-800 transition-colors #{request.path.start_with?('/admin/teams') ? 'bg-ruby-600 !text-white' : ''}" %>
+        </nav>
+        <div class="px-6 py-4 border-t border-ruby-800">
+          <%= link_to "← Back to Site", root_path, class: "text-gray-300 hover:text-white transition-colors block" %>
+        </div>
+      </aside>
+
+      <main class="md:ml-64 flex-1 p-4 md:p-8">
+        <% if notice %>
+          <div class="p-4 mb-6 rounded-lg bg-green-50 text-green-800 border border-green-200">
+            <%= notice %>
+          </div>
+        <% end %>
+
+        <% if alert %>
+          <div class="p-4 mb-6 rounded-lg bg-red-50 text-red-800 border border-red-200">
+            <%= alert %>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </main>
+    </div>
+  </body>
+</html>

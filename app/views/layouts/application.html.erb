@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title><%= content_for(:title) || "#{Conference.name} — Treasure Hunt" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="<%= Conference.short_name %>">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="<%= Conference.theme_color %>">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png?v=2" type="image/png">
+    <link rel="apple-touch-icon" href="/icon.png?v=2">
+    <link rel="manifest" href="/manifest">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker", { scope: "/" });
+      }
+    </script>
+  </head>
+
+  <body class="bg-warm-900 text-white min-h-screen">
+    <nav class="sticky top-0 z-40 bg-warm-900/95 backdrop-blur-md border-b border-white/5 font-['Inter']">
+      <div class="max-w-7xl mx-auto px-5 sm:px-8 flex justify-between items-center h-14">
+        <%= link_to root_path, class: "flex items-center gap-2 hover:opacity-90 transition-opacity shrink-0" do %>
+          <% if Conference.logo_asset.present? %>
+            <%= image_tag Conference.logo_asset, alt: Conference.name, class: "h-7 sm:h-8" %>
+          <% else %>
+            <span class="text-sm font-semibold"><%= Conference.short_name %></span>
+          <% end %>
+        <% end %>
+
+        <div class="flex items-center gap-1 sm:gap-2">
+          <%= link_to "Leaderboard", leaderboard_path, class: "px-3 py-1.5 text-xs font-medium text-white/70 hover:text-white rounded-md hover:bg-white/5 transition-colors min-h-[44px] inline-flex items-center" %>
+          <% if logged_in? %>
+            <% if current_user.team %>
+              <%= link_to team_path, class: "flex items-center gap-2 px-2.5 py-1.5 text-xs font-medium text-white/85 hover:text-white rounded-md ring-1 ring-white/10 hover:ring-white/20 hover:bg-white/5 transition-all min-h-[44px]" do %>
+                <span class="size-5 rounded-full bg-ruby-500/15 ring-1 ring-ruby-500/30 text-ruby-200 flex items-center justify-center text-[10px] font-semibold"><%= current_user.team.name.first.upcase %></span>
+                <span class="hidden sm:inline truncate max-w-[10rem]"><%= current_user.team.name %></span>
+              <% end %>
+            <% else %>
+              <%= link_to new_team_path, class: "px-3 py-1.5 text-xs font-medium text-ruby-300 hover:text-ruby-200 rounded-md hover:bg-white/5 transition-colors min-h-[44px] inline-flex items-center" do %>
+                Solo
+              <% end %>
+            <% end %>
+            <% if admin? %>
+              <%= link_to "Admin", admin_root_path, class: "px-3 py-1.5 text-xs font-medium text-white/70 hover:text-white rounded-md hover:bg-white/5 transition-colors min-h-[44px] inline-flex items-center" %>
+            <% end %>
+            <span class="hidden md:inline px-2 text-xs font-medium text-white/45"><%= current_user.display_name %></span>
+            <%= button_to "Logout", logout_path, method: :delete, class: "px-3 py-1.5 text-xs font-medium text-white/60 hover:text-white rounded-md hover:bg-white/5 transition-colors cursor-pointer min-h-[44px]" %>
+          <% else %>
+            <%= link_to "Log in", login_path, class: "ml-1 px-4 py-1.5 text-xs font-semibold bg-ruby-500 text-white rounded-md hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 min-h-[44px] inline-flex items-center" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <%# Toast notifications — fixed overlay, won't affect page layout %>
+    <div class="fixed top-16 left-1/2 -translate-x-1/2 z-50 w-full max-w-md px-4 flex flex-col gap-2 pointer-events-none" role="status" aria-live="polite">
+      <% if notice %>
+        <div data-controller="toast" class="toast-container pointer-events-auto px-4 py-3 bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/30 backdrop-blur-md rounded-lg text-sm font-medium shadow-lg cursor-pointer opacity-0 -translate-y-2 transition-all duration-200" data-action="click->toast#dismiss">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div data-controller="toast" data-toast-delay-value="6000" class="toast-container pointer-events-auto px-4 py-3 bg-ruby-500/15 text-ruby-200 ring-1 ring-ruby-500/30 backdrop-blur-md rounded-lg text-sm font-medium shadow-lg cursor-pointer opacity-0 -translate-y-2 transition-all duration-200" data-action="click->toast#dismiss">
+          <%= alert %>
+        </div>
+      <% end %>
+    </div>
+
+    <%= yield %>
+  </body>
+</html>
