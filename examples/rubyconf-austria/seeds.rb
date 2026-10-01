@@ -63,7 +63,7 @@ clue.update!(
   hints: [
     "South of Schwarzenbergplatz, on the road named after the prince who built it.",
     "Prince Eugen of Savoy, 1717–1723. Architect Johann Lukas von Hildebrandt.",
-    "Klimt's The Kiss lives in the upper palace. Gardens free; palace ticketed.",
+    "Klimt's The Kiss lives in the upper palace. Gardens free; palace ticketed."
   ],
   fun_fact: nil,
   sequence_number: 1,
@@ -94,7 +94,7 @@ clue.update!(
   hints: [
     "On a wide square south of the State Opera, between two of the inner Ring's largest fountains.",
     "Johann Bernhard Fischer von Erlach, 1716–1737. Charles VI's vow against the 1713 plague.",
-    "A Baroque dome flanked by two spiralling Trajan-style columns covered in reliefs.",
+    "A Baroque dome flanked by two spiralling Trajan-style columns covered in reliefs."
   ],
   fun_fact: nil,
   sequence_number: 2,
@@ -125,7 +125,7 @@ clue.update!(
   hints: [
     "Two thousand five hundred gilded laurel leaves on a windowless white dome.",
     "Built when young artists walked out of the Academy in 1898.",
-    "South of the State Opera, at the edge of the Naschmarkt.",
+    "South of the State Opera, at the edge of the Naschmarkt."
   ],
   fun_fact: nil,
   sequence_number: 3,
@@ -156,7 +156,7 @@ clue.update!(
   hints: [
     "On the Opernring, the Ringstraße's south-eastern arc, opposite the Albertinaplatz.",
     "Eduard van der Nüll, the architect, killed himself after Franz Joseph's offhand criticism in 1868.",
-    "Built 1861–1869; Mahler conducted his decade of controversial premieres here.",
+    "Built 1861–1869; Mahler conducted his decade of controversial premieres here."
   ],
   fun_fact: nil,
   sequence_number: 4,
@@ -187,7 +187,7 @@ clue.update!(
   hints: [
     "A composer in marble, in the Hofburg's private garden.",
     "The flowerbed at his feet is a treble clef.",
-    "Square, compass, and sun — the symbols of his most famous opera.",
+    "Square, compass, and sun — the symbols of his most famous opera."
   ],
   fun_fact: nil,
   sequence_number: 5,
@@ -218,7 +218,7 @@ clue.update!(
   hints: [
     "In the small palace garden between the imperial residence and the Ringstraße — a tall glass house at the south end.",
     "Friedrich Ohmann + Ludwig Beermann, 1901. Originally a Palmenhaus; the butterfly conservatory was added in 1998.",
-    "An iron-and-glass pavilion at the south end of the imperial back garden — exterior view free, butterflies ticketed.",
+    "An iron-and-glass pavilion at the south end of the imperial back garden — exterior view free, butterflies ticketed."
   ],
   fun_fact: nil,
   sequence_number: 6,
@@ -249,7 +249,7 @@ clue.update!(
   hints: [
     "A Renaissance gate, painted in Habsburg red and white, deep inside the imperial palace's inner courtyard.",
     "Five vowels in sequence — the personal motto of Frederick III, decoded a dozen ways and never settled.",
-    "Pass through the Michaelertrakt; the gate is on the western wall of the Innerer Burghof, just before the Schatzkammer entrance.",
+    "Pass through the Michaelertrakt; the gate is on the western wall of the Innerer Burghof, just before the Schatzkammer entrance."
   ],
   fun_fact: nil,
   sequence_number: 7,
@@ -280,7 +280,7 @@ clue.update!(
   hints: [
     "An emperor closed his curtains so he wouldn't have to see it from the palace.",
     "Its architect wrote the essay 'Ornament and Crime' the same year.",
-    "On a small square in the inner city, named for an archangel.",
+    "On a small square in the inner city, named for an archangel."
   ],
   fun_fact: nil,
   sequence_number: 8,
@@ -311,7 +311,7 @@ clue.update!(
   hints: [
     "A piece of a tree from 1440, behind glass at a building's corner.",
     "Travelling blacksmith apprentices each drove an iron nail into it for luck.",
-    "On the corner where Graben meets Kärntnerstraße — Vienna's busiest crossroads.",
+    "On the corner where Graben meets Kärntnerstraße — Vienna's busiest crossroads."
   ],
   fun_fact: nil,
   sequence_number: 9,
@@ -342,7 +342,7 @@ clue.update!(
   hints: [
     "Look up — the south buttress of the city's tallest church, just below the eaves.",
     "Iron, smooth, the size of a melon. A small plaque dates it to the year of the second siege.",
-    "On the south face of the cathedral whose spire dominates the inner-city skyline.",
+    "On the south face of the cathedral whose spire dominates the inner-city skyline."
   ],
   fun_fact: nil,
   sequence_number: 10,
@@ -373,7 +373,7 @@ clue.update!(
   hints: [
     "Above an arcade between two halves of one building, a clock counts twelve.",
     "Twelve figures parade across once a day, at noon.",
-    "Marcus Aurelius is said to have died on this square.",
+    "Marcus Aurelius is said to have died on this square."
   ],
   fun_fact: nil,
   sequence_number: 11,
@@ -404,7 +404,7 @@ clue.update!(
   hints: [
     "A Gothic spire on a steep medieval alley near the canal.",
     "Its name means 'on the bank' — but the bank is no longer there.",
-    "Napoleon's troops used it as an arsenal.",
+    "Napoleon's troops used it as an arsenal."
   ],
   fun_fact: nil,
   sequence_number: 12,
@@ -435,7 +435,7 @@ clue.update!(
   hints: [
     "On the Ringstrasse where it meets the Stadtpark, at the corner of Stubenring and Weiskirchnerstraße.",
     "Heinrich von Ferstel, 1871. Europe's first museum dedicated to applied arts and craft.",
-    "The foundation institution of the Wiener Werkstätte and the design lineage of the Vienna Secession.",
+    "The foundation institution of the Wiener Werkstätte and the design lineage of the Vienna Secession."
   ],
   fun_fact: nil,
   sequence_number: 13,
@@ -466,7 +466,7 @@ clue.update!(
   hints: [
     "Vienna's most-photographed monument, cast in twenty-four-carat gold.",
     "Edmund Hellmer, 1921. He plays his violin for nobody.",
-    "In the Stadtpark, on the eastern Ring.",
+    "In the Stadtpark, on the eastern Ring."
   ],
   fun_fact: nil,
   sequence_number: 14,
@@ -497,7 +497,7 @@ clue.update!(
   hints: [
     "The southern edge of Vienna's first public park, where a man-made tunnel mouth opens beside the lake.",
     "Friedrich Ohmann and Josef Hackhofer, 1903. A Donauweibchen statue presides over the portal.",
-    "A Jugendstil arch on the river-cover, a short walk south of the gilded composer in the same park.",
+    "A Jugendstil arch on the river-cover, a short walk south of the gilded composer in the same park."
   ],
   fun_fact: nil,
   sequence_number: 15,
@@ -528,7 +528,7 @@ clue.update!(
   hints: [
     "An architect renamed himself after rain — 'hundred-water.'",
     "A tree lives on its third storey.",
-    "Onion domes on a council block, in Landstraße.",
+    "Onion domes on a council block, in Landstraße."
   ],
   fun_fact: nil,
   sequence_number: 16,
@@ -559,7 +559,7 @@ clue.update!(
   hints: [
     "Three blocks from the painter's most famous building, his second one.",
     "A former bentwood-chair factory.",
-    "In the 3rd district, between the Hundertwasserhaus and the Donaukanal.",
+    "In the 3rd district, between the Hundertwasserhaus and the Donaukanal."
   ],
   fun_fact: nil,
   sequence_number: 17,
@@ -590,7 +590,7 @@ clue.update!(
   hints: [
     "On the Donauinsel, the 21-km-long artificial flood-control island that splits the Danube.",
     "Built 1972–1988 as flood protection; the recreation use was an afterthought that became the main one.",
-    "Accessible by U1 to the island station; busy on summer weekends, all but empty in winter.",
+    "Accessible by U1 to the island station; busy on summer weekends, all but empty in winter."
   ],
   fun_fact: nil,
   sequence_number: 18,
@@ -621,7 +621,7 @@ clue.update!(
   hints: [
     "In Seestadt Aspern, the 22nd district — built on a former airfield, served by the eastern terminus of the U2.",
     "Jane Jacobs (1916–2006), American-Canadian urbanist whose Death and Life of Great American Cities argued against the modernist demolition of old neighbourhoods.",
-    "Cross the bridge to reach the lake at the heart of the city's newest district — a few minutes' walk from the U2 terminus.",
+    "Cross the bridge to reach the lake at the heart of the city's newest district — a few minutes' walk from the U2 terminus."
   ],
   fun_fact: nil,
   sequence_number: 19,
@@ -653,7 +653,7 @@ clue.update!(
   hints: [
     "At the foot of a hill in the far western reaches of the city, fronting an enormous gravelled courtyard.",
     "Maria Theresia held court here; Karl I abdicated here in 1918.",
-    "The yellow palace front, seen from the great gravelled forecourt called the Ehrenhof.",
+    "The yellow palace front, seen from the great gravelled forecourt called the Ehrenhof."
   ],
   fun_fact: nil,
   sequence_number: 1,
@@ -684,7 +684,7 @@ clue.update!(
   hints: [
     "East side of the palace gardens, between the maze and the Neptunbrunnen.",
     "Johann Ferdinand Hetzendorf von Hohenberg, 1778. A Romantic folly built to look like the Roman Forum.",
-    "An eighteenth-century Romantic folly built to look like ancient ruins — in the eastern half of the palace gardens.",
+    "An eighteenth-century Romantic folly built to look like ancient ruins — in the eastern half of the palace gardens."
   ],
   fun_fact: nil,
   sequence_number: 2,
@@ -715,7 +715,7 @@ clue.update!(
   hints: [
     "On the hill above the Schloss — climb the gravel paths to the top.",
     "Maria Theresia commissioned it 1775 to mark the Habsburg recovery after the Seven Years' War.",
-    "The hilltop colonnade with the panoramic view back over the city.",
+    "The hilltop colonnade with the panoramic view back over the city."
   ],
   fun_fact: nil,
   sequence_number: 3,
@@ -746,7 +746,7 @@ clue.update!(
   hints: [
     "On Mariahilfer Straße in the 14th district, the long western axis out of the city.",
     "1909. Hans Schneider's purpose-built museum of technology, founded under Emperor Franz Joseph.",
-    "Founded under Emperor Franz Joseph; inside, the first electric power station, the first telephone exchange, and the country's earliest computer.",
+    "Founded under Emperor Franz Joseph; inside, the first electric power station, the first telephone exchange, and the country's earliest computer."
   ],
   fun_fact: nil,
   sequence_number: 4,
@@ -777,7 +777,7 @@ clue.update!(
   hints: [
     "In Esterházypark, a small public garden in the 6th district off Mariahilfer Straße.",
     "The Leitturm of the Esterházypark flak tower pair, converted into a public aquarium in 1957.",
-    "Exterior climbing wall up one side; panoramic café on the roof. Visible from any high point in the 6th district.",
+    "Exterior climbing wall up one side; panoramic café on the roof. Visible from any high point in the 6th district."
   ],
   fun_fact: nil,
   sequence_number: 5,
@@ -808,7 +808,7 @@ clue.update!(
   hints: [
     "A composer in marble, in the Hofburg's private garden.",
     "The flowerbed at his feet is a treble clef.",
-    "Square, compass, and sun — the symbols of his most famous opera.",
+    "Square, compass, and sun — the symbols of his most famous opera."
   ],
   fun_fact: nil,
   sequence_number: 6,
@@ -839,7 +839,7 @@ clue.update!(
   hints: [
     "In the small palace garden between the imperial residence and the Ringstraße — a tall glass house at the south end.",
     "Friedrich Ohmann + Ludwig Beermann, 1901. Originally a Palmenhaus; the butterfly conservatory was added in 1998.",
-    "An iron-and-glass pavilion at the south end of the imperial back garden — exterior view free, butterflies ticketed.",
+    "An iron-and-glass pavilion at the south end of the imperial back garden — exterior view free, butterflies ticketed."
   ],
   fun_fact: nil,
   sequence_number: 7,
@@ -870,7 +870,7 @@ clue.update!(
   hints: [
     "A Renaissance gate, painted in Habsburg red and white, deep inside the imperial palace's inner courtyard.",
     "Five vowels in sequence — the personal motto of Frederick III, decoded a dozen ways and never settled.",
-    "Pass through the Michaelertrakt; the gate is on the western wall of the Innerer Burghof, just before the Schatzkammer entrance.",
+    "Pass through the Michaelertrakt; the gate is on the western wall of the Innerer Burghof, just before the Schatzkammer entrance."
   ],
   fun_fact: nil,
   sequence_number: 8,
@@ -901,7 +901,7 @@ clue.update!(
   hints: [
     "A glass-walled circle set into the pavement of an old square.",
     "Soldiers slept here when Vienna had a Latin name.",
-    "Excavated during U-Bahn construction. Look for the cobbles that open downward.",
+    "Excavated during U-Bahn construction. Look for the cobbles that open downward."
   ],
   fun_fact: nil,
   sequence_number: 9,
@@ -932,7 +932,7 @@ clue.update!(
   hints: [
     "An emperor closed his curtains so he wouldn't have to see it from the palace.",
     "Its architect wrote the essay 'Ornament and Crime' the same year.",
-    "On a small square in the inner city, named for an archangel.",
+    "On a small square in the inner city, named for an archangel."
   ],
   fun_fact: nil,
   sequence_number: 10,
@@ -963,7 +963,7 @@ clue.update!(
   hints: [
     "Look up — the south buttress of the city's tallest church, just below the eaves.",
     "Iron, smooth, the size of a melon. A small plaque dates it to the year of the second siege.",
-    "On the south face of the cathedral whose spire dominates the inner-city skyline.",
+    "On the south face of the cathedral whose spire dominates the inner-city skyline."
   ],
   fun_fact: nil,
   sequence_number: 11,
@@ -994,7 +994,7 @@ clue.update!(
   hints: [
     "An inner-city square that owes its name to a medieval right of asylum, granted by Irish-Scottish monks.",
     "Four bronze allegorical women on a fountain plinth: Danube, Vistula, Po, Elbe.",
-    "Between Herrengasse and Schottentor, at the foot of the oldest monastery in Vienna.",
+    "Between Herrengasse and Schottentor, at the foot of the oldest monastery in Vienna."
   ],
   fun_fact: nil,
   sequence_number: 12,
@@ -1025,7 +1025,7 @@ clue.update!(
   hints: [
     "A scrap of the wall that broke the 1683 siege still stands above the modern street.",
     "Climb the stone staircase next to the University.",
-    "Beethoven lived in the house on top while writing the Eroica.",
+    "Beethoven lived in the house on top while writing the Eroica."
   ],
   fun_fact: nil,
   sequence_number: 13,
@@ -1056,7 +1056,7 @@ clue.update!(
   hints: [
     "A Greek temple built to hold a single Canova sculpture; the sculpture moved to a museum.",
     "One-fifth scale of the Hephaisteion in Athens.",
-    "In the rose garden between the Hofburg and the Burgtheater.",
+    "In the rose garden between the Hofburg and the Burgtheater."
   ],
   fun_fact: nil,
   sequence_number: 14,
@@ -1087,7 +1087,7 @@ clue.update!(
   hints: [
     "A Jugendstil staircase, built in 1910 for a forgotten Baroque painter.",
     "Heimito von Doderer made it the spine of a 900-page novel in 1951.",
-    "In Alsergrund, between Liechtensteinstraße and the street it's named after.",
+    "In Alsergrund, between Liechtensteinstraße and the street it's named after."
   ],
   fun_fact: nil,
   sequence_number: 15,
@@ -1118,7 +1118,7 @@ clue.update!(
   hints: [
     "In Alsergrund, the 9th district, with a wrought-iron gate on Fürstengasse.",
     "The Liechtensteins — princes whose territory between Switzerland and Austria measures only 160 km².",
-    "A princely garden palace in Alsergrund, holding the family's Rubens, Raphael, and Canova marbles.",
+    "A princely garden palace in Alsergrund, holding the family's Rubens, Raphael, and Canova marbles."
   ],
   fun_fact: nil,
   sequence_number: 16,
@@ -1149,7 +1149,7 @@ clue.update!(
   hints: [
     "In Türkenschanzpark in the 18th district — built on the actual 1683 Ottoman gun emplacement.",
     "The Ukrainian Cossacks under hetmans Kunicki and Mohyla, fighting under King Jan III Sobieski's command.",
-    "The 1990s monument to the Ukrainian Cossack defenders of the 1683 siege.",
+    "The 1990s monument to the Ukrainian Cossack defenders of the 1683 siege."
   ],
   fun_fact: nil,
   sequence_number: 17,
@@ -1180,7 +1180,7 @@ clue.update!(
   hints: [
     "On the slopes above the Donaukanal, in the 19th district between Heiligenstadt and Hohe Warte.",
     "A reciprocal sister-city gift from Setagaya, one of Tokyo's special wards.",
-    "The only Japanese garden in the city, free to enter from dawn to dusk.",
+    "The only Japanese garden in the city, free to enter from dawn to dusk."
   ],
   fun_fact: nil,
   sequence_number: 18,
@@ -1211,7 +1211,7 @@ clue.update!(
   hints: [
     "In the Augarten park, the 2nd district's grand Baroque public garden.",
     "Concrete walls so thick no peacetime explosive charge can safely dismantle them.",
-    "The larger of the pair, deeper inside the Baroque park than the other.",
+    "The larger of the pair, deeper inside the Baroque park than the other."
   ],
   fun_fact: nil,
   sequence_number: 19,
@@ -1242,7 +1242,7 @@ clue.update!(
   hints: [
     "At the western edge of a vast public park, near Praterstern.",
     "1897. Built for the Emperor Franz Joseph's golden jubilee.",
-    "The Third Man film. The cuckoo-clock speech. Welles on a slow turn above Vienna.",
+    "The Third Man film. The cuckoo-clock speech. Welles on a slow turn above Vienna."
   ],
   fun_fact: nil,
   sequence_number: 20,

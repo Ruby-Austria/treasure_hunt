@@ -8,7 +8,7 @@
 
 config_path = Rails.root.join("config/conference.yml")
 raw = if config_path.exist?
-  YAML.safe_load(ERB.new(config_path.read).result, permitted_classes: [Symbol], aliases: true) || {}
+  YAML.safe_load(ERB.new(config_path.read).result, permitted_classes: [ Symbol ], aliases: true) || {}
 else
   {}
 end
