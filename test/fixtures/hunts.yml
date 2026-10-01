@@ -1,0 +1,28 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: City Adventure Hunt
+  description: Explore the city and find hidden treasures
+  status: draft
+  difficulty: easy
+  hunt_type: for_fun
+  price: 0.0
+  language: en
+
+two:
+  name: Premium Treasure Hunt
+  description: A challenging hunt with great rewards
+  status: approved
+  difficulty: hard
+  hunt_type: reward
+  price: 29.99
+  language: en
+
+approved_hunt:
+  name: Vienna Walking Hunt
+  description: Explore Vienna
+  status: approved
+  difficulty: easy
+  hunt_type: for_fun
+  price: 0.0
+  language: en

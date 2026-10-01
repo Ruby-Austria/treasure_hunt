@@ -1,0 +1,100 @@
+<div class="bg-white rounded-lg shadow-md p-6 mb-8 flex justify-between items-center">
+  <h2 class="text-2xl font-semibold text-gray-900">Dashboard</h2>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Users</h3>
+    <p class="text-gray-600 mb-2">
+      Total Users: <strong class="text-2xl text-gray-900"><%= @stats[:users_total] %></strong>
+    </p>
+    <p class="text-gray-600">
+      Admin Users: <strong class="text-gray-900"><%= @stats[:users_admin] %></strong>
+    </p>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Locations</h3>
+    <p class="text-gray-600 mb-1">
+      Total Locations: <strong class="text-2xl text-gray-900"><%= @stats[:locations_total] %></strong>
+    </p>
+    <p class="text-gray-500 text-sm mb-4">
+      Unique Tags: <strong><%= @stats[:locations_tags] %></strong>
+    </p>
+    <%= link_to "Manage Locations →", admin_locations_path, class: "inline-block px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Hunts</h3>
+    <p class="text-gray-600 mb-1">
+      Total Hunts: <strong class="text-2xl text-gray-900"><%= @stats[:hunts_total] %></strong>
+    </p>
+    <p class="text-gray-500 text-sm mb-1">
+      Draft: <strong><%= @stats[:hunts_draft] %></strong> |
+      Approved: <strong><%= @stats[:hunts_approved] %></strong> |
+      Archived: <strong><%= @stats[:hunts_archived] %></strong>
+    </p>
+    <p class="text-gray-500 text-sm mb-4">
+      Unique Tags: <strong><%= @stats[:hunts_tags] %></strong>
+    </p>
+    <%= link_to "Manage Hunts →", admin_hunts_path, class: "inline-block px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Clues</h3>
+    <p class="text-gray-600 mb-4">
+      Total Clues: <strong class="text-2xl text-gray-900"><%= @stats[:clues_total] %></strong>
+    </p>
+    <%= link_to "Manage Clues →", admin_clues_path, class: "inline-block px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Adventures</h3>
+    <p class="text-gray-600 mb-1">
+      Total Adventures: <strong class="text-2xl text-gray-900"><%= @stats[:adventures_total] %></strong>
+    </p>
+    <p class="text-gray-500 text-sm">
+      In Progress: <strong><%= @stats[:adventures_in_progress] %></strong> |
+      Completed: <strong><%= @stats[:adventures_completed] %></strong>
+    </p>
+  </div>
+</div>
+
+<% if @flagged_users.any? %>
+  <div class="bg-red-50 border border-red-200 rounded-lg shadow-md p-6 mb-8">
+    <h3 class="text-lg font-semibold text-red-900 mb-4">Flagged Users (<%= @flagged_users.size %>)</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-red-200">
+            <th class="text-left py-2 pr-4 text-red-800">User</th>
+            <th class="text-left py-2 pr-4 text-red-800">Reason</th>
+            <th class="text-left py-2 pr-4 text-red-800">Flagged At</th>
+            <th class="text-right py-2 text-red-800">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @flagged_users.each do |user| %>
+            <tr class="border-b border-red-100">
+              <td class="py-2 pr-4 text-gray-900"><%= user.display_name %> (<%= user.email %>)</td>
+              <td class="py-2 pr-4 text-gray-700"><%= user.flag_reason %></td>
+              <td class="py-2 pr-4 text-gray-500"><%= time_ago_in_words(user.flagged_at) %> ago</td>
+              <td class="py-2 text-right">
+                <%= button_to "Unflag", unflag_admin_attendee_path(user), method: :post, class: "px-3 py-1 text-sm font-semibold text-white bg-green-600 rounded hover:bg-green-700 transition-colors" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% end %>
+
+<div class="bg-white rounded-lg shadow-md p-6">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+  <div class="flex gap-3 flex-wrap">
+    <%= link_to "Create New Location", new_admin_location_path, class: "inline-block px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+    <%= link_to "Create New Hunt", new_admin_hunt_path, class: "inline-block px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+    <%= link_to "Create New Clue", new_admin_clue_path, class: "inline-block px-4 py-2 text-sm font-semibold text-white bg-ruby-600 rounded-lg hover:bg-ruby-700 transition-colors" %>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Central Park
+  lat: 40.7829
+  long: -73.9654
+  country: USA
+  city: New York
+  difficulty: easy
+  unlock_radius: 50
+  description: A large public park in Manhattan
+  reasoning: Great location for treasure hunts
+
+two:
+  name: Golden Gate Bridge
+  lat: 37.8199
+  long: -122.4783
+  country: USA
+  city: San Francisco
+  difficulty: moderate
+  unlock_radius: 100
+  description: Iconic suspension bridge
+  reasoning: Scenic location with historical significance

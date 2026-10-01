@@ -1,0 +1,61 @@
+<div class="min-h-dvh bg-warm-900 text-white antialiased font-['Inter'] relative overflow-hidden isolate">
+  <div class="absolute -top-40 -right-40 size-[24rem] sm:size-[32rem] rounded-full bg-ruby-600/25 blur-[120px] sm:blur-[140px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-1/2 -left-40 size-[20rem] rounded-full bg-ruby-500/10 blur-[100px] pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-lg mx-auto px-5 sm:px-7 pt-10 sm:pt-16 pb-20">
+    <header class="mb-10">
+      <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-400 mb-3">Crew</p>
+      <h1 class="font-['Fraunces'] italic text-4xl sm:text-5xl tracking-tight leading-[1.05]">Team up.</h1>
+      <p class="mt-3 text-sm sm:text-base text-white/55 max-w-[50ch]">Form a squad to share progress and split the search. Solo works too.</p>
+    </header>
+
+    <%# Create %>
+    <section class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-6 sm:p-7 mb-5">
+      <h2 class="font-['Fraunces'] italic text-xl sm:text-2xl tracking-tight mb-5">Create a team.</h2>
+
+      <%= form_with model: @team, url: team_path, class: "space-y-4" do |f| %>
+        <% if @team.errors.any? %>
+          <div class="rounded-lg bg-ruby-500/10 ring-1 ring-ruby-500/30 px-4 py-3">
+            <ul class="text-sm text-ruby-200 space-y-1">
+              <% @team.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div>
+          <%= f.label :name, "Team name", class: "block text-xs font-mono uppercase tracking-[0.2em] text-white/55 mb-2" %>
+          <%= f.text_field :name, class: "w-full px-3.5 py-2.5 max-sm:text-base/6 text-sm bg-white/[0.04] ring-1 ring-white/15 rounded-lg text-white placeholder:text-white/30 focus:outline focus:outline-2 -outline-offset-1 focus:outline-ruby-500 focus:bg-white/[0.06] transition-all", placeholder: "e.g. Ruby Hunters", maxlength: 50, autofocus: true %>
+        </div>
+
+        <%= f.submit "Create team →", class: "w-full mt-1 px-5 py-3 text-sm font-semibold bg-ruby-500 text-white rounded-lg hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 shadow-[0_8px_30px_-5px_rgba(227,8,24,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ruby-300 cursor-pointer" %>
+      <% end %>
+    </section>
+
+    <%# Divider %>
+    <div class="relative flex items-center my-6" aria-hidden="true">
+      <div class="flex-1 h-px bg-white/10"></div>
+      <span class="px-3 font-mono text-[10px] uppercase tracking-[0.3em] text-white/40">or</span>
+      <div class="flex-1 h-px bg-white/10"></div>
+    </div>
+
+    <%# Join %>
+    <section class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-6 sm:p-7">
+      <h2 class="font-['Fraunces'] italic text-xl sm:text-2xl tracking-tight mb-5">Join with code.</h2>
+
+      <%= form_with url: join_team_path, method: :post, class: "space-y-4" do |f| %>
+        <div>
+          <%= f.label :invite_code, "Invite code", class: "block text-xs font-mono uppercase tracking-[0.2em] text-white/55 mb-2" %>
+          <%= f.text_field :invite_code, class: "w-full px-3.5 py-3 max-sm:text-lg text-lg bg-white/[0.04] ring-1 ring-white/15 rounded-lg text-white placeholder:text-white/25 focus:outline focus:outline-2 -outline-offset-1 focus:outline-ruby-500 focus:bg-white/[0.06] transition-all uppercase tracking-[0.4em] text-center font-mono", placeholder: "ABC123", maxlength: 6 %>
+        </div>
+
+        <%= f.submit "Join team →", class: "w-full mt-1 px-5 py-3 text-sm font-semibold text-white/90 bg-white/[0.05] rounded-lg hover:bg-white/[0.08] hover:text-white transition-colors ring-1 ring-white/15 hover:ring-white/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ruby-300 cursor-pointer" %>
+      <% end %>
+    </section>
+
+    <p class="text-center text-xs text-white/45 mt-8">
+      Teams are optional — you can also <%= link_to "play solo", dashboard_path, class: "text-ruby-300 hover:text-ruby-200 transition-colors underline-offset-4 hover:underline" %>.
+    </p>
+  </div>
+</div>

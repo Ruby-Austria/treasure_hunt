@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+# If running the rails server then create or migrate existing database
+if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
+  echo "DATABASE_URL set: ${DATABASE_URL:+yes}${DATABASE_URL:-NO — container will fail!}"
+  ./bin/rails db:prepare
+fi
+
+exec "${@}"

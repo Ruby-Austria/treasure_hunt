@@ -1,0 +1,138 @@
+<div class="min-h-dvh bg-warm-900 text-white antialiased font-['Inter'] relative overflow-hidden isolate">
+  <%# Ambient ruby glow %>
+  <div class="absolute -top-40 -right-40 size-[24rem] sm:size-[36rem] rounded-full bg-ruby-600/25 blur-[120px] sm:blur-[140px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-1/2 -left-40 size-[20rem] sm:size-[28rem] rounded-full bg-ruby-500/10 blur-[100px] sm:blur-[120px] pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-4xl mx-auto px-5 sm:px-7 pt-10 sm:pt-16 lg:pt-20 pb-20">
+    <header class="mb-10 sm:mb-14">
+      <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-ruby-400 mb-3">Standings</p>
+      <h1 class="font-['Fraunces'] italic text-4xl sm:text-5xl tracking-tight text-balance leading-[1.05]">Leaderboard</h1>
+      <p class="mt-3 text-sm sm:text-base text-white/55 max-w-[55ch] text-pretty">Progress across all treasure hunts. First to finish either route claims it.</p>
+    </header>
+
+    <% if @hunts.empty? %>
+      <div class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-10 sm:p-14 text-center">
+        <p class="font-['Fraunces'] italic text-2xl sm:text-3xl text-white/80 mb-2">No hunts yet.</p>
+        <p class="text-sm text-white/50">The game hasn't started — check back soon.</p>
+      </div>
+    <% end %>
+
+    <% per_page = LeaderboardController::PER_PAGE %>
+    <% @hunts.each_with_index do |hunt, hi| %>
+      <section class="mb-10 sm:mb-14" id="hunt-<%= hunt.id %>">
+        <div class="flex items-baseline justify-between gap-3 mb-4 sm:mb-5">
+          <div class="min-w-0">
+            <p class="font-mono text-[10px] uppercase tracking-[0.3em] text-white/40 mb-1">Route <%= %w[I II III IV V VI][hi] || (hi + 1).to_s %></p>
+            <h2 class="font-['Fraunces'] italic text-2xl sm:text-3xl tracking-tight truncate"><%= hunt.name %></h2>
+          </div>
+          <% pg = @pagination[hunt.id] %>
+          <% if pg && pg[:total_entries] > 0 %>
+            <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-white/45 whitespace-nowrap">
+              <%= pluralize(pg[:total_entries], "explorer") %>
+            </p>
+          <% end %>
+        </div>
+
+        <% entries = @rankings[hunt.id] || [] %>
+        <% if entries.empty? && pg[:total_entries] == 0 %>
+          <div class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 p-8 sm:p-10 text-center">
+            <p class="text-sm text-white/50">No one has started this route yet. Be the first.</p>
+          </div>
+        <% else %>
+          <div class="rounded-3xl bg-white/[0.03] ring-1 ring-white/10 overflow-hidden">
+            <ol role="list" class="divide-y divide-white/5">
+              <% rank_offset = (pg[:page] - 1) * per_page %>
+              <% entries.each_with_index do |entry, i| %>
+                <% rank = rank_offset + i %>
+                <% is_current = logged_in? && (current_user.team&.name == entry[:name] || (!entry[:team] && current_user.display_name == entry[:name])) %>
+                <li class="<%= is_current ? 'bg-ruby-500/[0.06] ring-1 ring-inset ring-ruby-500/25' : '' %> px-4 sm:px-6 py-3.5 sm:py-4 flex items-center gap-3 sm:gap-5">
+                  <%# Rank %>
+                  <div class="shrink-0 w-9 sm:w-10 text-center">
+                    <% if rank == 0 %>
+                      <span class="text-xl sm:text-2xl" aria-label="1st place">🏆</span>
+                    <% elsif rank == 1 %>
+                      <span class="text-xl sm:text-2xl" aria-label="2nd place">🥈</span>
+                    <% elsif rank == 2 %>
+                      <span class="text-xl sm:text-2xl" aria-label="3rd place">🥉</span>
+                    <% else %>
+                      <span class="font-mono text-xs sm:text-sm text-white/40 tabular-nums"><%= format("%02d", rank + 1) %></span>
+                    <% end %>
+                  </div>
+
+                  <%# Name + badges %>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="text-sm sm:text-base font-semibold tracking-tight <%= is_current ? 'text-white' : 'text-white/85' %> truncate"><%= entry[:name] %></span>
+                      <% if entry[:team] %>
+                        <span class="font-mono text-[10px] uppercase tracking-wider text-white/40 whitespace-nowrap"><%= entry[:member_count] %> crew</span>
+                      <% end %>
+                      <% if entry[:completed] %>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30">Finished</span>
+                      <% end %>
+                      <% if is_current %>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-ruby-500/20 text-ruby-300 ring-1 ring-ruby-500/30">You</span>
+                      <% end %>
+                    </div>
+                  </div>
+
+                  <%# Progress %>
+                  <div class="shrink-0 flex items-center gap-2.5 sm:gap-3">
+                    <div class="relative w-20 sm:w-32 h-1.5 bg-white/8 rounded-full overflow-hidden" role="progressbar" aria-valuenow="<%= entry[:solved] %>" aria-valuemin="0" aria-valuemax="<%= entry[:total] %>" aria-label="<%= entry[:name] %> progress">
+                      <div class="absolute inset-y-0 left-0 bg-linear-to-r from-ruby-500 to-ruby-400 rounded-full" style="width: <%= entry[:total] > 0 ? (entry[:solved].to_f / entry[:total] * 100).round : 0 %>%"></div>
+                    </div>
+                    <span class="font-mono text-[11px] sm:text-xs text-white/55 tabular-nums w-9 text-right"><%= entry[:solved] %>/<%= entry[:total] %></span>
+                  </div>
+                </li>
+              <% end %>
+
+              <%# Current user's position if not on this page %>
+              <% if (user_rank = @current_user_rank[hunt.id]) %>
+                <% entry = user_rank[:entry] %>
+                <% rank = user_rank[:rank] %>
+                <li class="bg-ruby-500/[0.06] ring-1 ring-inset ring-ruby-500/25 border-t border-dashed border-white/15 px-4 sm:px-6 py-3.5 sm:py-4 flex items-center gap-3 sm:gap-5">
+                  <div class="shrink-0 w-9 sm:w-10 text-center">
+                    <span class="font-mono text-xs sm:text-sm text-white/40 tabular-nums"><%= format("%02d", rank + 1) %></span>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                      <span class="text-sm sm:text-base font-semibold tracking-tight text-white truncate"><%= entry[:name] %></span>
+                      <% if entry[:team] %>
+                        <span class="font-mono text-[10px] uppercase tracking-wider text-white/40 whitespace-nowrap"><%= entry[:member_count] %> crew</span>
+                      <% end %>
+                      <% if entry[:completed] %>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30">Finished</span>
+                      <% end %>
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider bg-ruby-500/20 text-ruby-300 ring-1 ring-ruby-500/30">You</span>
+                    </div>
+                  </div>
+                  <div class="shrink-0 flex items-center gap-2.5 sm:gap-3">
+                    <div class="relative w-20 sm:w-32 h-1.5 bg-white/8 rounded-full overflow-hidden" role="progressbar" aria-valuenow="<%= entry[:solved] %>" aria-valuemin="0" aria-valuemax="<%= entry[:total] %>" aria-label="<%= entry[:name] %> progress">
+                      <div class="absolute inset-y-0 left-0 bg-linear-to-r from-ruby-500 to-ruby-400 rounded-full" style="width: <%= entry[:total] > 0 ? (entry[:solved].to_f / entry[:total] * 100).round : 0 %>%"></div>
+                    </div>
+                    <span class="font-mono text-[11px] sm:text-xs text-white/55 tabular-nums w-9 text-right"><%= entry[:solved] %>/<%= entry[:total] %></span>
+                  </div>
+                </li>
+              <% end %>
+            </ol>
+
+            <% if pg[:total_pages] > 1 %>
+              <div class="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-t border-white/5 bg-white/[0.015]">
+                <span class="font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">
+                  <%= (pg[:page] - 1) * per_page + 1 %>–<%= [pg[:page] * per_page, pg[:total_entries]].min %> of <%= pg[:total_entries] %>
+                </span>
+                <div class="flex gap-2">
+                  <% if pg[:page] > 1 %>
+                    <%= link_to "← Prev", leaderboard_path(params: request.query_parameters.merge("page_#{hunt.id}" => pg[:page] - 1), anchor: "hunt-#{hunt.id}"), class: "inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white/80 hover:text-white rounded-md ring-1 ring-white/15 hover:ring-white/30 hover:bg-white/5 transition-all" %>
+                  <% end %>
+                  <% if pg[:page] < pg[:total_pages] %>
+                    <%= link_to "Next →", leaderboard_path(params: request.query_parameters.merge("page_#{hunt.id}" => pg[:page] + 1), anchor: "hunt-#{hunt.id}"), class: "inline-flex items-center px-3 py-1.5 text-xs font-semibold text-white/80 hover:text-white rounded-md ring-1 ring-white/15 hover:ring-white/30 hover:bg-white/5 transition-all" %>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </section>
+    <% end %>
+  </div>
+</div>

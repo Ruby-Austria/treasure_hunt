@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: regular_user
+  hunt: two
+  status: 2
+  clue_ids: []
+  solved_clue_ids: []
+
+two:
+  user: admin_user
+  hunt: two
+  status: 2
+  clue_ids: []
+  solved_clue_ids: []
