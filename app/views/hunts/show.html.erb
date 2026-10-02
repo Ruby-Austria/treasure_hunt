@@ -4,7 +4,7 @@
 
   <div class="relative max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-12">
     <%= link_to logged_in? ? dashboard_path : root_path, class: "inline-flex items-center gap-1.5 text-xs font-medium text-white/50 hover:text-white mb-8" do %>
-      <svg class="size-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4L6 8l4 4"/></svg>
+      <svg class="size-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 4L6 8l4 4" /></svg>
       Back
     <% end %>
 
@@ -73,19 +73,19 @@
       <% if !logged_in? %>
         <%= link_to login_path, class: "group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold bg-ruby-500 text-white rounded-xl hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 shadow-[0_10px_40px_-10px_rgba(227,8,24,0.6)]" do %>
           Log in to begin
-          <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+          <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4" /></svg>
         <% end %>
       <% elsif total == 0 %>
         <p class="text-sm text-white/50 italic text-center">This hunt has no clues yet and cannot be started.</p>
       <% elsif @latest_adventure %>
         <p class="font-mono text-[10px] uppercase tracking-[0.25em] text-accent mb-3 text-center">Adventure in progress</p>
         <%= link_to adventure_path(@latest_adventure), class: "group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold bg-ruby-500 text-white rounded-xl hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 shadow-[0_10px_40px_-10px_rgba(227,8,24,0.6)]" do %>
-          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
           Resume mission
         <% end %>
       <% else %>
         <%= button_to hunt_adventures_path(@hunt), method: :post, class: "group flex items-center justify-center gap-2 w-full px-6 py-4 text-base font-semibold bg-ruby-500 text-white rounded-xl hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500 shadow-[0_10px_40px_-10px_rgba(227,8,24,0.6)] cursor-pointer" do %>
-          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="size-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
           Start adventure
         <% end %>
       <% end %>
@@ -105,7 +105,7 @@
                     <p class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-0.5"><%= adventure.updated_at.strftime("%b %d, %Y") %> · <%= pluralize(adventure.hints_used, 'hint') %></p>
                   </div>
                 </div>
-                <svg class="size-3.5 text-white/40 group-hover:text-white" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
+                <svg class="size-3.5 text-white/40 group-hover:text-white" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4" /></svg>
               <% end %>
             </li>
           <% end %>

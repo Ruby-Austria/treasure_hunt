@@ -55,7 +55,7 @@
               <div class="mb-6"></div>
             <% end %>
 
-            <%# Route — start ━━━━━━ X. Progress bar scales to any clue count.   %>
+            <%# Route — start ━━━━━━ X. Progress bar scales to any clue count. %>
             <%# Tick marks render per clue when ≤12, otherwise the bar is plain. %>
             <%
               clue_count = hunt.clues.size
@@ -86,7 +86,7 @@
               <%# X terminus %>
               <% if state == :done %>
                 <span class="shrink-0 size-7 rounded-full bg-accent flex items-center justify-center shadow-[0_0_20px_rgba(142,199,96,0.4)]" aria-label="Reached X">
-                  <svg class="size-4 text-white" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><path d="M2.5 6L5 8.5 9.5 3.5"/></svg>
+                  <svg class="size-4 text-white" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="3"><path d="M2.5 6L5 8.5 9.5 3.5" /></svg>
                 </span>
               <% else %>
                 <span class="shrink-0 size-7 rounded-full bg-linear-to-br from-ruby-500 to-ruby-700 flex items-center justify-center <%= state == :active ? 'shadow-[0_0_24px_rgba(227,8,24,0.45)]' : '' %>" aria-label="Reward terminus">
@@ -101,20 +101,21 @@
               <span class="<%= state == :done ? 'text-accent' : 'text-ruby-300/70' %>"><%= state == :done ? "Reached X" : "X · ?" %></span>
             </div>
 
-            <% case state when :active %>
+            <% case state %>
+            <% when :active %>
               <%= link_to adventure_path(adv), class: "group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-ruby-500 text-white rounded-lg hover:bg-ruby-400 transition-colors ring-1 ring-ruby-500" do %>
                 Resume
-                <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+                <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4" /></svg>
               <% end %>
             <% when :done %>
               <%= link_to hunt_path(hunt), class: "inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-light" do %>
                 Revisit
-                <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+                <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4" /></svg>
               <% end %>
             <% else %>
               <%= link_to hunt_path(hunt), class: "group inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold text-white/85 hover:text-white rounded-lg ring-1 ring-white/15 hover:ring-white/30 hover:bg-white/5 transition-all" do %>
                 Set out
-                <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4"/></svg>
+                <svg class="size-4 transition-transform group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10m0 0L9 4m4 4l-4 4" /></svg>
               <% end %>
             <% end %>
           </div>
