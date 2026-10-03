@@ -281,3 +281,9 @@ Comprehensive improvement session covering security, testing, performance, and U
 - **Fix**: `.ruby-version` → `3.4.11`, Dockerfile `ARG RUBY_VERSION=3.4.11`. ADR-0003 u `decisions.md`.
 - **Validacija (lokalno, Ruby 3.4.11)**: frozen `bundle install`, rubocop, brakeman, bundler-audit, importmap audit, `herb analyze`, 419 tests i 9 system tests green.
 - **Follow-up**: `force_ruby_platform` za nokogiri/ffi/herb vjerovatno više nije potreban — ukloniti u zasebnom PR-u nakon provjere prebuilt gem-ova na 3.4.11.
+
+## 2026-10-03 — Uklonjeni force_ruby_platform workaround-i (ADR-0003 follow-up)
+
+- **Promjena**: uklonjeni `force_ruby_platform: true` za nokogiri, ffi i herb (i direktne `nokogiri`/`ffi` Gemfile linije koje su postojale samo zbog toga). `Gemfile.lock` dobija prebuilt Linux varijante za iste verzije (nokogiri 1.19.4, ffi 1.17.3, herb 0.11.0); izbačen zastarjeli `tzinfo-data` spec (gem je samo za windows/jruby, nema te platforme u lock-u).
+- **Validacija (lokalno, Ruby 3.4.11, svjež `vendor/bundle`)**: frozen install instalira `x86_64-linux-gnu` binarije i sva tri se učitavaju; rubocop, brakeman, bundler-audit, importmap audit, `herb analyze`, 419 tests i 9 system tests green.
+- **Pravilo iz 2026-10-03 (herb CI fix) više ne važi**: novi native gem-ovi ne trebaju `force_ruby_platform` na stabilnom Ruby-ju.

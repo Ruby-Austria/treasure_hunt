@@ -11,7 +11,7 @@ Use ADR/PRD documents before implementing features. Prevents ad-hoc builds and g
 Chose Stripe Checkout for PCI compliance. Implemented, then removed entirely when platform narrowed to free conference use.
 
 **ADR-0003: Pin a stable Ruby patch release** (Accepted, 2026-10-03)
-`.ruby-version` pinned to 3.4.11 (Dockerfile `RUBY_VERSION` matches). `3.4.0` resolved on GitHub Actions (`ruby/setup-ruby`) to a `3.4.0dev` pre-release snapshot, which broke prebuilt native gems (nokogiri, ffi, herb → `force_ruby_platform`) and crashed the interpreter at boot (`[BUG] rb_sys_fail(opendir)` in bootsnap). Bump patch releases deliberately, keeping CI and Docker on the same version.
+`.ruby-version` pinned to 3.4.11 (Dockerfile `RUBY_VERSION` matches). `3.4.0` resolved on GitHub Actions (`ruby/setup-ruby`) to a `3.4.0dev` pre-release snapshot, which broke prebuilt native gems (nokogiri, ffi, herb → `force_ruby_platform`) and crashed the interpreter at boot (`[BUG] rb_sys_fail(opendir)` in bootsnap). Bump patch releases deliberately, keeping CI and Docker on the same version. On 3.4.11 the `force_ruby_platform` workarounds were removed; native gems install prebuilt binaries again.
 
 ## Product Decisions (chronological)
 
