@@ -58,7 +58,8 @@ gem "nokogiri", force_ruby_platform: true
 gem "ffi", force_ruby_platform: true
 
 # A modern templating language for the HTML+ERB you already have.
-gem "herb", "~> 0.11.0"
+# Source-compiled for the same Ruby 3.4.0+1 ABI reason as nokogiri/ffi above.
+gem "herb", "~> 0.11.0", force_ruby_platform: true
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
