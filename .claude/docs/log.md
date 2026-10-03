@@ -267,3 +267,10 @@ Comprehensive improvement session covering security, testing, performance, and U
 - Poslije: 429 tests, 1214 assertions (+17)
 - System tests: 11 (all passing, updated for new nav bar)
 - Novi: Purchase model (7), payment gate (2), purchase bypass (1), abandon adventure (2), hunt paid?/purchased_by? (5)
+
+## 2026-10-03 — CI fix: herb native extension ABI mismatch
+
+- **Problem**: nakon dodavanja `herb` gem-a (#14), `scan_js`, `lint_erb`, `test` i `system-test` padaju pri boot-u: `Failed to load the Herb native extension (LoadError)`. Precompiled `herb-0.11.0-x86_64-linux-gnu` ne učitava se na GitHub Actions Ruby 3.4.0 (`3.4.0+1` ABI) — isti problem kao ranije sa nokogiri/ffi.
+- **Fix**: `gem "herb", "~> 0.11.0", force_ruby_platform: true` + uklonjene platform-specifične herb varijante iz `Gemfile.lock` (isti pattern kao nokogiri). Source build traži samo C compiler (ubuntu-latest i Dockerfile `build-essential` ga imaju).
+- **Validacija**: frozen `bundle install`, `herb analyze` (36 clean), `@herb-tools/linter` (0 offenses), `importmap audit`, rubocop (0 offenses), 419 tests green.
+- **Pravilo**: svaki novi gem sa native ekstenzijom dodaj sa `force_ruby_platform: true` dok je `.ruby-version` 3.4.0.
