@@ -52,14 +52,8 @@ gem "csv"
 # Pin minitest to 5.x — Minitest 6.0 has breaking API changes incompatible with Rails 8.1
 gem "minitest", "~> 5.25"
 
-# Force source compilation for native C extensions (precompiled binaries
-# have ABI mismatch with Ruby 3.4.0dev / GitHub Actions' 3.4.0+1 ABI).
-gem "nokogiri", force_ruby_platform: true
-gem "ffi", force_ruby_platform: true
-
 # A modern templating language for the HTML+ERB you already have.
-# Source-compiled for the same Ruby 3.4.0+1 ABI reason as nokogiri/ffi above.
-gem "herb", "~> 0.11.0", force_ruby_platform: true
+gem "herb", "~> 0.11.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
