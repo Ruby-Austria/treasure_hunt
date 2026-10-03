@@ -26,7 +26,7 @@
     </div>
     <div class="footer">
       <p>
-        <% if Conference.website_url.present? %><a href="<%= Conference.website_url %>"><%= Conference.name %></a> &middot; <% end %><%= Conference.city %><br>
+        <% if Conference.website_url.present? %><%= link_to Conference.name, Conference.website_url %> &middot; <% end %><%= Conference.city %><br>
         <%= Conference.dates %>
       </p>
     </div>

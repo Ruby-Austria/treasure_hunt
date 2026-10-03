@@ -49,7 +49,6 @@ gem "acts-as-taggable-on", require: "acts-as-taggable-on"
 # Ruby 3.4 unbundled csv from stdlib; needed by the attendees import migration.
 gem "csv"
 
-
 # Pin minitest to 5.x — Minitest 6.0 has breaking API changes incompatible with Rails 8.1
 gem "minitest", "~> 5.25"
 
@@ -57,6 +56,9 @@ gem "minitest", "~> 5.25"
 # have ABI mismatch with Ruby 3.4.0dev / GitHub Actions' 3.4.0+1 ABI).
 gem "nokogiri", force_ruby_platform: true
 gem "ffi", force_ruby_platform: true
+
+# A modern templating language for the HTML+ERB you already have.
+gem "herb", "~> 0.11.0"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
