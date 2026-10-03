@@ -274,3 +274,10 @@ Comprehensive improvement session covering security, testing, performance, and U
 - **Fix**: `gem "herb", "~> 0.11.0", force_ruby_platform: true` + uklonjene platform-specifične herb varijante iz `Gemfile.lock` (isti pattern kao nokogiri). Source build traži samo C compiler (ubuntu-latest i Dockerfile `build-essential` ga imaju).
 - **Validacija**: frozen `bundle install`, `herb analyze` (36 clean), `@herb-tools/linter` (0 offenses), `importmap audit`, rubocop (0 offenses), 419 tests green.
 - **Pravilo**: svaki novi gem sa native ekstenzijom dodaj sa `force_ruby_platform: true` dok je `.ruby-version` 3.4.0.
+
+## 2026-10-03 — ADR-0003: Ruby 3.4.0dev → 3.4.11
+
+- **Problem**: nakon merge-a #15, `system-test` na `main` pada sa `[BUG] rb_sys_fail(opendir) - errno == 0` (bootsnap, exit 134) prije ijednog testa. Log otkriva da `.ruby-version` `3.4.0` na GitHub Actions instalira `ruby 3.4.0dev (2024-12-25 master f450108330)` — pre-release snapshot. To je i pravi uzrok ranijih native gem ABI problema (nokogiri/ffi/herb).
+- **Fix**: `.ruby-version` → `3.4.11`, Dockerfile `ARG RUBY_VERSION=3.4.11`. ADR-0003 u `decisions.md`.
+- **Validacija (lokalno, Ruby 3.4.11)**: frozen `bundle install`, rubocop, brakeman, bundler-audit, importmap audit, `herb analyze`, 419 tests i 9 system tests green.
+- **Follow-up**: `force_ruby_platform` za nokogiri/ffi/herb vjerovatno više nije potreban — ukloniti u zasebnom PR-u nakon provjere prebuilt gem-ova na 3.4.11.
