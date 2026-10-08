@@ -50,7 +50,7 @@ gem "acts-as-taggable-on", require: "acts-as-taggable-on"
 gem "csv"
 
 # Pin minitest to 5.x — Minitest 6.0 has breaking API changes incompatible with Rails 8.1
-gem "minitest", "~> 5.25"
+gem "minitest", "~> 6.0"
 
 # A modern templating language for the HTML+ERB you already have.
 gem "herb", "~> 0.11.0"
