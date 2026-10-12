@@ -91,4 +91,4 @@ group :test do
   gem "webmock", require: false
 end
 
-gem "tailwindcss-rails", "~> 4.4"
+gem "tailwindcss-rails", "~> 4.6"
