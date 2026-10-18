@@ -287,3 +287,10 @@ Comprehensive improvement session covering security, testing, performance, and U
 - **Promjena**: uklonjeni `force_ruby_platform: true` za nokogiri, ffi i herb (i direktne `nokogiri`/`ffi` Gemfile linije koje su postojale samo zbog toga). `Gemfile.lock` dobija prebuilt Linux varijante za iste verzije (nokogiri 1.19.4, ffi 1.17.3, herb 0.11.0); izbačen zastarjeli `tzinfo-data` spec (gem je samo za windows/jruby, nema te platforme u lock-u).
 - **Validacija (lokalno, Ruby 3.4.11, svjež `vendor/bundle`)**: frozen install instalira `x86_64-linux-gnu` binarije i sva tri se učitavaju; rubocop, brakeman, bundler-audit, importmap audit, `herb analyze`, 419 tests i 9 system tests green.
 - **Pravilo iz 2026-10-03 (herb CI fix) više ne važi**: novi native gem-ovi ne trebaju `force_ruby_platform` na stabilnom Ruby-ju.
+
+## 2026-10-18 — Dependabot batch: 10 PR-ova landano
+
+- **Merge-ovano (squash)**: #38 brakeman 8.1.0, #37 pg 1.7.0, #36 thruster 0.1.27, #35 solid_queue 1.7.0, #33 selenium-webdriver 4.51.0, #31 web-console 4.3.0, #30 rollbar 3.8.0, #29 bootsnap 1.26.0 i #34 webmock 3.34.0 (zadnja dva nakon `@dependabot rebase` zbog Gemfile.lock konflikta; webmock je pri rebase-u skočio na 3.34.0).
+- **#34 system-test**: prvi run pao na `test_user_can_logout` ("Logout" nije pronađen); poslije rebase-a zelen, ostali PR-ovi na istom base-u zeleni. Nije reproducirano.
+- **#32 image_processing 2.2.0 → zamijenjen sa #39**: image_processing 2.0 je `mini_magick` i `ruby-vips` napravio *soft* dependency-jima, pa je goli bump tiho izbacio `ruby-vips` iz bundle-a. Active Storage koristi vips za analizu i varijante — `Hunt#treasure_image` bi izgubio metadata, a buduća `.variant` bi pukla; CI to ne pokriva. #39 dodaje `gem "ruby-vips"` eksplicitno (libvips je već u Dockerfile-u i CI-u).
+- **Pravilo**: kod major bump-a gem-a provjeri da li je izbacio tranzitivne dependency-je iz `Gemfile.lock` (`-` linije bez `+` parnjaka) i da li ih aplikacija implicitno koristi.
