@@ -294,3 +294,8 @@ Comprehensive improvement session covering security, testing, performance, and U
 - **#34 system-test**: prvi run pao na `test_user_can_logout` ("Logout" nije pronađen); poslije rebase-a zelen, ostali PR-ovi na istom base-u zeleni. Nije reproducirano.
 - **#32 image_processing 2.2.0 → zamijenjen sa #39**: image_processing 2.0 je `mini_magick` i `ruby-vips` napravio *soft* dependency-jima, pa je goli bump tiho izbacio `ruby-vips` iz bundle-a. Active Storage koristi vips za analizu i varijante — `Hunt#treasure_image` bi izgubio metadata, a buduća `.variant` bi pukla; CI to ne pokriva. #39 dodaje `gem "ruby-vips", require: false` eksplicitno — `require: false` je obavezan: Active Storage sam radi `require "ruby-vips"` uz `rescue LoadError`, a goli gem bi se učitao kroz `Bundler.require` i srušio boot gdje nema libvips-a (CI `scan_js`).
 - **Pravilo**: kod major bump-a gem-a provjeri da li je izbacio tranzitivne dependency-je iz `Gemfile.lock` (`-` linije bez `+` parnjaka) i da li ih aplikacija implicitno koristi.
+
+## 2026-10-23 — Ruby 3.4.11 → 4.0.9, Rails 8.1.4 potvrđen
+
+- **Promjena**: `.ruby-version` i Dockerfile `RUBY_VERSION` na 4.0.9 (zadnji stabilni Ruby); Rails je već 8.1.4, što je zadnji 8.1 release. CLAUDE.md je govorio "Rails 8.1.3", ispravljeno na stvarne verzije (Ruby 4.0.9, Rails 8.1.4); README i `/tech-review` ažurirani. ADR-0003 dopunjen.
+- **Pravilo**: Ruby i Docker verzija se mijenjaju zajedno, CI čita `.ruby-version`.

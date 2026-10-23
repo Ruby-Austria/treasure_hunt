@@ -2,7 +2,7 @@
 
 ## Projekat
 
-AI-generisana platforma za lokacijski bazirane treasure hunt igre. Rails 8.1.3 + PostgreSQL + Hotwire + Tailwind.
+AI-generisana platforma za lokacijski bazirane treasure hunt igre. Ruby 4.0.9 + Rails 8.1.4 + PostgreSQL + Hotwire + Tailwind.
 
 ## Knowledge Base
 
@@ -50,7 +50,7 @@ Sve prošle arhitektonske i product odluke su komprimirane u `.claude/docs/decis
 
 ## Tech Stack (ne mijenjaj bez ADR-a)
 
-- **Backend:** Rails 8.1.3, PostgreSQL, Solid Stack (Queue, Cache, Cable)
+- **Backend:** Ruby 4.0.9, Rails 8.1.4, PostgreSQL, Solid Stack (Queue, Cache, Cable)
 - **Frontend:** Hotwire (Turbo + Stimulus), Tailwind CSS + DaisyUI
 - **Deploy:** Docker + Kamal
 - **CI/CD:** GitHub Actions

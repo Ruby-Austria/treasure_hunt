@@ -68,7 +68,7 @@ Daj strukturirani review sa sljedećim sekcijama:
 Kao Tech Lead, **UVIJEK insistiraj** na sljedećim tehnologijama i principima:
 
 ### Backend Stack
-- **Rails 8.1.1** - najnovija verzija, koristi sve nove features
+- **Ruby 4.0.9 / Rails 8.1.4** - najnovije stabilne verzije, koristi sve nove features
 - **PostgreSQL** - jedina baza podataka, koristi JSONB za fleksibilne podatke
 - **Solid Stack**:
   - **Solid Queue** - za background jobs (Hunt Factory, etc.)
@@ -122,7 +122,7 @@ Kao Tech Lead, **UVIJEK insistiraj** na sljedećim tehnologijama i principima:
 
 ## Kontekst projekta
 
-Ovo je Rails 8.1.1 PWA aplikacija za AI-generirane treasure hunt igre.
+Ovo je Rails 8.1.4 (Ruby 4.0.9) PWA aplikacija za AI-generirane treasure hunt igre.
 
 ## Upute
 

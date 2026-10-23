@@ -39,7 +39,7 @@ Writing good clues is the hard part, and it's not a code problem. See [`db/data/
 
 ## Tech stack
 
-- **Backend:** Ruby 3.4 / Rails 8.1 / PostgreSQL
+- **Backend:** Ruby 4.0 / Rails 8.1 / PostgreSQL
 - **Frontend:** Hotwire (Turbo + Stimulus) / Tailwind CSS
 - **Infra:** Docker + Kamal or Railway, Solid Queue/Cache/Cable
 - **CI:** GitHub Actions
