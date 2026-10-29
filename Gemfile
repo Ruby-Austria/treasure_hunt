@@ -55,7 +55,7 @@ gem "csv"
 gem "minitest", "~> 6.0"
 
 # A modern templating language for the HTML+ERB you already have.
-gem "herb", "~> 0.11.0"
+gem "herb", "~> 0.11.1"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
