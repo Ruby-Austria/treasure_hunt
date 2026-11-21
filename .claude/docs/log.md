@@ -311,3 +311,14 @@ Comprehensive improvement session covering security, testing, performance, and U
 - **Pravilo**: kad je isti check crven na *svim* Dependabot PR-ovima, uzrok je `main`, ne bump — prvo popravi `main` (ili sve spoji u jedan PR), pa tek onda merge-uj pojedinačne.
 - **Napomena (lokalno okruženje)**: undercover 0.9.0 čita `coverage/coverage.json` i puca sa `Encoding::InvalidByteSequenceError` kad je locale US-ASCII — lokalno pokreći sa `LANG=C.UTF-8` (GitHub runner-i to već imaju).
 - **Otvoreno**: `SimpleCov.add_filter` je deprecated u korist `SimpleCov.skip` (`test/test_helper.rb:16-19`) — samo warning, nije dirano.
+
+## 2026-11-21 — Fix: flaky `test_user_can_logout` (Chrome leak detection), SimpleCov deprecation, Herb config
+
+- **Root cause flake-a**: `PlatformSmokeTest#test_user_can_logout` je padao povremeno (#34 u oktobru: `Unable to find link or button "Logout"`; #50 u novembru: `expected "/dashboard" to equal "/"`). Nije flake nego order-dependent bug: fixture lozinka `password123` je na Chrome listi procurjelih lozinki, pa nakon uspješnog login-a Chrome otvara "password found in a data breach" upozorenje koje preuzme tastaturu. Sljedeći login u istom browseru tipka u prazno — polja ostanu prazna, `POST /login` se nikad ne pošalje. Zavisi od redoslijeda (seed) i timinga, zato je izgledalo nasumično. Reproducirana je varijanta iz #34; varijanta iz #50 (klik na Logout bez efekta) se uklapa u isti mehanizam, ali nije zasebno reproducirana.
+- **Dokaz**: dva login testa u fiksnom redoslijedu padaju 6/6 (email `""`, password dužine 0 odmah nakon `fill_in`, u `log/test.log` nema `POST /login`); sa `profile.password_manager_leak_detection: false` prolaze 4/4. Par logout testova: prije 10/20 padova, poslije 12/12 prolaza; cijeli system suite 5/5.
+- **Fix**: `driver_option.add_preference("profile.password_manager_leak_detection", false)` u `test/application_system_test_case.rb`.
+- **SimpleCov**: `add_filter` → `skip` u `test/test_helper.rb` (deprecated od simplecov 1.x); coverage brojke identične (672/754 linija, 168/230 grana).
+- **Herb**: dodan `.herb.yml` sa `version: 0.11.2` (zaključava set lint pravila — CI vrti `npx @herb-tools/linter` bez pinovane verzije) i `framework: actionview`. Linter je prije prijavljivao info `herb-config-framework-option`; sada 0 offenses, `herb analyze` 36 clean.
+- **Nije moguće popraviti**: `marcel` (1.2.1, zadnji 2.1.0) drži `activestorage 8.1.4.1` (`~> 1.0`), `net-ssh` (7.3.10, zadnji 8.1.2) drži `kamal 2.12.0` (`~> 7.3`). Oba su već zadnje verzije svojih roditelja — čeka se upstream.
+- **Ažurirano**: [08-testiranje](playbook/08-testiranje.md) — Chrome driver opcije i postupak za povremene system test padove.
+- **Pravilo**: "flaky" system test prvo reproduciraj u fiksnom redoslijedu i provjeri da li request stiže do servera — tek onda zaključuj.

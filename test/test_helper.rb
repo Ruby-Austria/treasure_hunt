@@ -13,10 +13,10 @@ SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([
 SimpleCov.start "rails" do
   enable_coverage :branch
   minimum_coverage 0
-  add_filter "/test/"
-  add_filter "/config/"
-  add_filter "/db/"
-  add_filter "/vendor/"
+  skip "/test/"
+  skip "/config/"
+  skip "/db/"
+  skip "/vendor/"
 end
 
 ENV["RAILS_ENV"] ||= "test"

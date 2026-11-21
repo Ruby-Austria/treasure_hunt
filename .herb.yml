@@ -1,0 +1,6 @@
+# Herb configuration (https://herb-tools.dev/configuration).
+# `version` locks the lint rule set: upgrading Herb won't enable new rules until it is bumped here.
+version: 0.11.2
+
+# Templates are Action View (Rails helpers such as form_with), not plain Ruby ERB.
+framework: actionview
