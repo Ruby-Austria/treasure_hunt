@@ -299,3 +299,15 @@ Comprehensive improvement session covering security, testing, performance, and U
 
 - **Promjena**: `.ruby-version` i Dockerfile `RUBY_VERSION` na 4.0.9 (zadnji stabilni Ruby); Rails je već 8.1.4, što je zadnji 8.1 release. CLAUDE.md je govorio "Rails 8.1.3", ispravljeno na stvarne verzije (Ruby 4.0.9, Rails 8.1.4); README i `/tech-review` ažurirani. ADR-0003 dopunjen.
 - **Pravilo**: Ruby i Docker verzija se mijenjaju zajedno, CI čita `.ruby-version`.
+
+## 2026-11-21 — Ruby 4.0.10, Rails 8.1.4.1, svi gem-ovi na zadnje verzije (zamjenjuje Dependabot #42–#51)
+
+- **Promjena**: `.ruby-version` i Dockerfile `RUBY_VERSION` 4.0.9 → 4.0.10 (zadnji stabilni; 4.1 je još preview). `bundle update --all`: Rails 8.1.4 → 8.1.4.1 (security release), puma 8.1.2, solid_queue 1.7.2, turbo-rails 2.0.23, tailwindcss-rails 4.7.0, herb 0.11.2, minitest 6.1.0, undercover 0.9.0, selenium-webdriver 4.53.0, bootsnap 1.26.2, csv 3.3.7, rubocop 1.92.3 i tranzitivni gem-ovi (major skokovi: json 3.1.0, prism 2.1.0, parallel 2.3.0). `BUNDLED WITH` 4.0.3 → 4.1.0. Gemfile constraint-i podignuti kao u Dependabot PR-ovima (rails `~> 8.1.4`, minitest `~> 6.1`, herb `~> 0.11.2`, tailwindcss-rails `~> 4.7`). ADR-0003 dopunjen; CLAUDE.md i `/tech-review` ažurirani.
+- **Zašto jedan PR**: svih 10 Dependabot PR-ova (#42–#51) je bilo crveno na `scan_ruby` jer je sam `main` padao na `bundler-audit` (Rails 8.1.4 gem-ovi, nokogiri 1.19.4, rack 3.2.7, rails-html-sanitizer 1.7.1, loofah 2.25.2, crass 1.0.7, addressable 2.9.0). `addressable` nije popravljao nijedan od njih, pa nijedan nije mogao postati zelen sam.
+- **Trijaža CI padova na Dependabot PR-ovima**: 14 job-ova od 5.11. palo je na kompajliranju `rugged 1.9.6` (`extconf.rb failed … checking for -lgit2`) na runner image-u `20261025.179.1` — defekt image-a, noviji image gradi rugged normalno. `test_user_can_logout` na #50 (`expected "/dashboard" to equal "/"`) je isti flaky test kao u oktobru na #34.
+- **Uklonjen tranzitivni gem**: `imagen` (undercover 0.9.0 ga više ne koristi; aplikacija ga nigdje ne referencira).
+- **Validacija (lokalno, Ruby 4.0.10)**: 419 tests / 1213 assertions i 9 system tests green; rubocop, brakeman, bundler-audit (0 ranjivosti), importmap audit, `herb analyze` (36 clean), `@herb-tools/linter` (0 failing). undercover 0.9.0 provjeren namjerno netestiranom metodom — i dalje pada sa exit 1.
+- **Validacija (Docker)**: produkcijski image izgrađen iz `ruby:4.0.10-slim` (Bundler 4.0.20 iz image-a sam instalira lock-ovani 4.1.0, `assets:precompile` prolazi) i podignut uz praznu bazu: `db:prepare` prolazi, `/up`, `/` i `/login` vraćaju 200 na Puma 8.1.2.
+- **Pravilo**: kad je isti check crven na *svim* Dependabot PR-ovima, uzrok je `main`, ne bump — prvo popravi `main` (ili sve spoji u jedan PR), pa tek onda merge-uj pojedinačne.
+- **Napomena (lokalno okruženje)**: undercover 0.9.0 čita `coverage/coverage.json` i puca sa `Encoding::InvalidByteSequenceError` kad je locale US-ASCII — lokalno pokreći sa `LANG=C.UTF-8` (GitHub runner-i to već imaju).
+- **Otvoreno**: `SimpleCov.add_filter` je deprecated u korist `SimpleCov.skip` (`test/test_helper.rb:16-19`) — samo warning, nije dirano.

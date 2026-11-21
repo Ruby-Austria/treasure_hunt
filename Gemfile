@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.1.1"
+gem "rails", "~> 8.1.4"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use postgresql as the database for Active Record
@@ -51,11 +51,11 @@ gem "acts-as-taggable-on", require: "acts-as-taggable-on"
 # Ruby 3.4 unbundled csv from stdlib; needed by the attendees import migration.
 gem "csv"
 
-# Pin minitest to 5.x — Minitest 6.0 has breaking API changes incompatible with Rails 8.1
-gem "minitest", "~> 6.0"
+# Declared explicitly so minitest majors are bumped deliberately — 6.0 shipped breaking API changes
+gem "minitest", "~> 6.1"
 
 # A modern templating language for the HTML+ERB you already have.
-gem "herb", "~> 0.11.0"
+gem "herb", "~> 0.11.2"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -93,4 +93,4 @@ group :test do
   gem "webmock", require: false
 end
 
-gem "tailwindcss-rails", "~> 4.6"
+gem "tailwindcss-rails", "~> 4.7"
