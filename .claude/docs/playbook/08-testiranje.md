@@ -202,6 +202,10 @@ class AdventureFlowTest < ActionDispatch::SystemTestCase
 end
 ```
 
+**Chrome driver opcije** žive u `test/application_system_test_case.rb` (system testovi nasljeđuju `ApplicationSystemTestCase`). `profile.password_manager_leak_detection` mora ostati `false`: fixture lozinka (`password123`) je na Chrome listi procurjelih lozinki, pa nakon uspješnog login-a Chrome otvara upozorenje koje "pojede" tipke sljedećeg login-a u istom browseru. Simptom je order-dependent flake — `fill_in` ostavi prazna polja, `POST /login` se nikad ne pošalje, test pada sa `Unable to find link or button "Logout"` ili ostane na pogrešnoj stranici.
+
+**Kad system test pada povremeno**: ne proglašavaj ga flaky-jem. Pokreni par testova u fiksnom redoslijedu (`i_suck_and_my_tests_are_order_dependent!`), uporedi `log/test.log` uspješnog i neuspješnog run-a (da li je request uopšte stigao do servera) i pogledaj `tmp/screenshots/`.
+
 ## Pokretanje testova
 
 ```bash
