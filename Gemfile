@@ -51,7 +51,7 @@ gem "acts-as-taggable-on", require: "acts-as-taggable-on"
 # Ruby 3.4 unbundled csv from stdlib; needed by the attendees import migration.
 gem "csv"
 
-# Pin minitest to 5.x — Minitest 6.0 has breaking API changes incompatible with Rails 8.1
+# Declared explicitly so minitest majors are bumped deliberately — 6.0 shipped breaking API changes
 gem "minitest", "~> 6.1"
 
 # A modern templating language for the HTML+ERB you already have.
